@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface AFGitHubAppDelegate : UIResponder <UIApplicationDelegate>
+@interface AFGitHubSampleAppDelegate : UIResponder <UIApplicationDelegate>
 
 @property (strong, nonatomic) UIWindow *window;
 

@@ -1,7 +1,7 @@
 #import "AFGitHubAPIClient.h"
 #import "AFJSONRequestOperation.h"
 
-static NSString * const kAFGitHubAPIBaseURLString = @"<# API Base URL #>";
+static NSString * const kAFGitHubAPIBaseURLString = @"https://api.github.com";
 
 @implementation AFGitHubAPIClient
 
