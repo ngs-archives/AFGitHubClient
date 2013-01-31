@@ -23,6 +23,8 @@
 		85C67AB816BA183C009CC38D /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 85C67AB616BA183C009CC38D /* InfoPlist.strings */; };
 		85C67ABB16BA183C009CC38D /* AFGitHubTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 85C67ABA16BA183C009CC38D /* AFGitHubTests.m */; };
 		85C67AC716BA1E02009CC38D /* AFGitHubAPIClient.m in Sources */ = {isa = PBXBuildFile; fileRef = 85C67AC616BA1E02009CC38D /* AFGitHubAPIClient.m */; };
+		85C67ACA16BA2327009CC38D /* AFGitHubAPIRequestOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 85C67AC916BA2327009CC38D /* AFGitHubAPIRequestOperation.m */; };
+		85C67ACD16BA2374009CC38D /* AFGitHubAPIResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = 85C67ACC16BA2374009CC38D /* AFGitHubAPIResponse.m */; };
 		D1C4921A6A5742ADAE4EB6F3 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 6B04A6AC7B2846268AF0689B /* libPods.a */; };
 /* End PBXBuildFile section */
 
@@ -61,6 +63,11 @@
 		85C67ABA16BA183C009CC38D /* AFGitHubTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AFGitHubTests.m; sourceTree = "<group>"; };
 		85C67AC516BA1E02009CC38D /* AFGitHubAPIClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AFGitHubAPIClient.h; sourceTree = "<group>"; };
 		85C67AC616BA1E02009CC38D /* AFGitHubAPIClient.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AFGitHubAPIClient.m; sourceTree = "<group>"; };
+		85C67AC816BA2327009CC38D /* AFGitHubAPIRequestOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AFGitHubAPIRequestOperation.h; sourceTree = "<group>"; };
+		85C67AC916BA2327009CC38D /* AFGitHubAPIRequestOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AFGitHubAPIRequestOperation.m; sourceTree = "<group>"; };
+		85C67ACB16BA2374009CC38D /* AFGitHubAPIResponse.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AFGitHubAPIResponse.h; sourceTree = "<group>"; };
+		85C67ACC16BA2374009CC38D /* AFGitHubAPIResponse.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AFGitHubAPIResponse.m; sourceTree = "<group>"; };
+		85C67AD016BA23F8009CC38D /* AFGitHubObject.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AFGitHubObject.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -168,10 +175,31 @@
 		85C67AC416BA1DDB009CC38D /* AFGitHubClient */ = {
 			isa = PBXGroup;
 			children = (
-				85C67AC516BA1E02009CC38D /* AFGitHubAPIClient.h */,
-				85C67AC616BA1E02009CC38D /* AFGitHubAPIClient.m */,
+				85C67ACF16BA23E3009CC38D /* Data */,
+				85C67ACE16BA23DB009CC38D /* Networking */,
 			);
 			path = AFGitHubClient;
+			sourceTree = "<group>";
+		};
+		85C67ACE16BA23DB009CC38D /* Networking */ = {
+			isa = PBXGroup;
+			children = (
+				85C67AC516BA1E02009CC38D /* AFGitHubAPIClient.h */,
+				85C67AC616BA1E02009CC38D /* AFGitHubAPIClient.m */,
+				85C67AC816BA2327009CC38D /* AFGitHubAPIRequestOperation.h */,
+				85C67AC916BA2327009CC38D /* AFGitHubAPIRequestOperation.m */,
+				85C67ACB16BA2374009CC38D /* AFGitHubAPIResponse.h */,
+				85C67ACC16BA2374009CC38D /* AFGitHubAPIResponse.m */,
+			);
+			name = Networking;
+			sourceTree = "<group>";
+		};
+		85C67ACF16BA23E3009CC38D /* Data */ = {
+			isa = PBXGroup;
+			children = (
+				85C67AD016BA23F8009CC38D /* AFGitHubObject.h */,
+			);
+			name = Data;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -303,6 +331,8 @@
 				85C67A9D16BA183C009CC38D /* main.m in Sources */,
 				85C67AA016BA183C009CC38D /* AFGitHubSampleAppDelegate.m in Sources */,
 				85C67AC716BA1E02009CC38D /* AFGitHubAPIClient.m in Sources */,
+				85C67ACA16BA2327009CC38D /* AFGitHubAPIRequestOperation.m in Sources */,
+				85C67ACD16BA2374009CC38D /* AFGitHubAPIResponse.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
