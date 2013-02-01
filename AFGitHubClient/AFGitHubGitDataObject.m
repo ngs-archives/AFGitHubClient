@@ -1,5 +1,5 @@
 //
-//  AFGitHubAPIRequestOperation.h
+//  AFGitHubGitDataObject.m
 //
 //  Copyright (c) 2012 Atsushi Nagase (http://ngs.io/)
 //
@@ -21,11 +21,8 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 //  THE SOFTWARE.
 
-#import "AFJSONRequestOperation.h"
+#import "AFGitHubGitDataObject.h"
 
-@class AFGitHubAPIResponse;
-@interface AFGitHubAPIRequestOperation : AFJSONRequestOperation
-
-@property (nonatomic, readonly) AFGitHubAPIResponse *ghResponse;
+@implementation AFGitHubGitDataObject
 
 @end

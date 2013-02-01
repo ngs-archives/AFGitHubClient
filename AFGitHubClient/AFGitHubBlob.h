@@ -1,5 +1,5 @@
 //
-//  AFGitHubAPIRequestOperation.h
+//  AFGitHubBlob.h
 //
 //  Copyright (c) 2012 Atsushi Nagase (http://ngs.io/)
 //
@@ -21,11 +21,16 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 //  THE SOFTWARE.
 
-#import "AFJSONRequestOperation.h"
+#import "AFGitHubGitObject.h"
 
-@class AFGitHubAPIResponse;
-@interface AFGitHubAPIRequestOperation : AFJSONRequestOperation
+@interface AFGitHubBlob : AFGitHubGitObject
 
-@property (nonatomic, readonly) AFGitHubAPIResponse *ghResponse;
+@property (nonatomic, copy) NSData *data;
+@property (nonatomic, copy) NSString *base64Content;
+@property (nonatomic, copy) NSString *content;
+@property (nonatomic, copy) UIImage *imageContent;
+@property (nonatomic, assign) NSInteger size;
+
+- (NSString *)contentWithEncoding:(NSStringEncoding)encoding;
 
 @end

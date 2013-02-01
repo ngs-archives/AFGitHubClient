@@ -1,5 +1,5 @@
 //
-// Prefix header for all source files of the 'AFGitHub' target in the 'AFGitHub' project
+//  Prefix header for all source files of the 'AFGitHub' target in the 'AFGitHub' project
 //
 
 #ifdef __OBJC__

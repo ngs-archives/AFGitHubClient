@@ -1,5 +1,5 @@
 //
-//  AFGitHubAPIRequestOperation.h
+//  AFGitHubUser.h
 //
 //  Copyright (c) 2012 Atsushi Nagase (http://ngs.io/)
 //
@@ -21,11 +21,25 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 //  THE SOFTWARE.
 
-#import "AFJSONRequestOperation.h"
+#import <Foundation/Foundation.h>
+#import "AFGitHubObject.h"
 
-@class AFGitHubAPIResponse;
-@interface AFGitHubAPIRequestOperation : AFJSONRequestOperation
+@interface AFGitHubUser : NSObject<AFGitHubObject>
 
-@property (nonatomic, readonly) AFGitHubAPIResponse *ghResponse;
+@property (nonatomic, assign) NSInteger userId;
+@property (nonatomic, copy) NSString *gravatarId;
+@property (nonatomic, copy) NSString *login;
+@property (nonatomic, copy) NSString *type;
+@property (nonatomic, copy) NSURL *URL;
+@property (nonatomic, copy) NSURL *avatarURL;
+@property (nonatomic, copy) NSURL *eventsURL;
+@property (nonatomic, copy) NSURL *followersURL;
+@property (nonatomic, copy) NSURL *followingURL;
+@property (nonatomic, copy) NSURL *gistsURL;
+@property (nonatomic, copy) NSURL *organizationsURL;
+@property (nonatomic, copy) NSURL *receivedEventsURL;
+@property (nonatomic, copy) NSURL *reposURL;
+@property (nonatomic, copy) NSURL *starredURL;
+@property (nonatomic, copy) NSURL *subscriptionsURL;
 
 @end

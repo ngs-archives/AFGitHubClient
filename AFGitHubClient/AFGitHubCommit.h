@@ -1,5 +1,5 @@
 //
-//  AFGitHubAPIRequestOperation.h
+//  AFGitHubCommit.h
 //
 //  Copyright (c) 2012 Atsushi Nagase (http://ngs.io/)
 //
@@ -21,11 +21,17 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 //  THE SOFTWARE.
 
-#import "AFJSONRequestOperation.h"
+#import "AFGitHubGitObject.h"
 
-@class AFGitHubAPIResponse;
-@interface AFGitHubAPIRequestOperation : AFJSONRequestOperation
+@class AFGitHubCommit, AFGitHubTree, AFGitHubUser;
+@interface AFGitHubCommit : AFGitHubGitObject
 
-@property (nonatomic, readonly) AFGitHubAPIResponse *ghResponse;
+@property (nonatomic, copy) AFGitHubCommit *parent;
+@property (nonatomic, copy) AFGitHubTree *tree;
+@property (nonatomic, copy) AFGitHubUser *author;
+@property (nonatomic, copy) AFGitHubUser *committer;
+@property (nonatomic, copy) NSString *message;
+@property (nonatomic, copy) NSDate *commitedAt;
+@property (nonatomic, copy) NSDate *authedAt;
 
 @end

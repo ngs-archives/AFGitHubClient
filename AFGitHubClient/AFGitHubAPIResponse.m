@@ -1,13 +1,29 @@
 //
 //  AFGitHubAPIResponse.m
-//  AFGitHub
 //
-//  Created by Atsushi Nagase on 1/31/13.
-//  Copyright (c) 2013 LittleApps Inc. All rights reserved.
+//  Copyright (c) 2012 Atsushi Nagase (http://ngs.io/)
 //
+//  Permission is hereby granted, free of charge, to any person obtaining a copy
+//  of this software and associated documentation files (the "Software"), to deal
+//  in the Software without restriction, including without limitation the rights
+//  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+//  copies of the Software, and to permit persons to whom the Software is
+//  furnished to do so, subject to the following conditions:
+//
+//  The above copyright notice and this permission notice shall be included in
+//  all copies or substantial portions of the Software.
+//
+//  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+//  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+//  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+//  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+//  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+//  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+//  THE SOFTWARE.
 
 #import "AFGitHubAPIResponse.h"
 #import "AFGitHubObject.h"
+#import "AFGitHubLinkHeader.h"
 
 @interface AFGitHubAPIResponse ()
 
@@ -18,6 +34,18 @@
 @end
 
 @implementation AFGitHubAPIResponse
+
+- (id)initWithResponse:(NSHTTPURLResponse *)response
+             itemClass:(Class)itemClass
+                  JSON:(id)JSON {
+  if(self = [self init]) {
+    self.itemClass = itemClass;
+    [self processResponse:response JSON:JSON];
+  }
+  return self;
+}
+
+#pragma mark - Accessors
 
 - (id)first {
   if([self.all count]>0) {
@@ -43,64 +71,42 @@
   _cursor = 0;
 }
 
-- (void)processResponse:(NSURLResponse *)response data:(NSData *)data error:(NSError *)error {
-  _httpResponse = (NSHTTPURLResponse *)response;
-  id json = nil;
-  id<AFGitHubObject> object = nil;
-  _items = nil;
+- (void)setItemClass:(Class)itemClass {
+  if(itemClass)
+    NSAssert([itemClass conformsToProtocol:@protocol(AFGitHubObject)], @"%@ does not confirm to AFGitHubObject protocol", NSStringFromClass(itemClass));
+  _itemClass = itemClass;
+}
+
+#pragma mark -
+
+- (void)processResponse:(NSHTTPURLResponse *)response JSON:(id)JSON {
   if(self.itemClass) {
-
-    if(data)
-      json = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:&error];
-
-    if(!json) {
-      _success = NO;
+    if(!JSON) {
+      self.success = NO;
       return;
+    } else {
+      self.items = @[].mutableCopy;
+      self.success = YES;
     }
-
-    _items = [NSMutableArray array];
-
-    NSAssert([self.itemClass conformsToProtocol:@protocol(AFGitHubObject)], @"%@ does not confirm to GHKObject protocol", NSStringFromClass(self.class));
-
-    if([json isKindOfClass:[NSDictionary class]]) {
-      object = [[self.itemClass alloc] initWithDictionary:json];
-      [_items addObject:object];
-    } else if([json isKindOfClass:[NSArray class]]) {
-      for (NSDictionary *item in json) {
+    id<AFGitHubObject> object = nil;
+    if([JSON isKindOfClass:[NSDictionary class]]) {
+      object = [[self.itemClass alloc] initWithDictionary:JSON];
+      [self.items addObject:object];
+    } else if([JSON isKindOfClass:[NSArray class]]) {
+      for (NSDictionary *item in JSON) {
         object = [[self.itemClass alloc] initWithDictionary:item];
-        [_items addObject:object];
+        [self.items addObject:object];
       }
     }
   }
-
-  NSDictionary *headers = _httpResponse.allHeaderFields;
+  NSDictionary *headers = response.allHeaderFields;
   NSString *link = [headers valueForKey:@"Link"];
-  NSDictionary *dict = [self parseLinkHeader:link];
-
-  self.nextURL  = [dict valueForKey:@"next"];
-  self.prevURL  = [dict valueForKey:@"prev"];
-  self.firstURL = [dict valueForKey:@"first"];
-  self.lastURL  = [dict valueForKey:@"last"];
-
+  AFGitHubLinkHeader *h = [[AFGitHubLinkHeader alloc] initWithHeaderField:link];
+  self.nextURL = [h URLForKey:@"rel" value:@"next"];
+  self.prevURL = [h URLForKey:@"rel" value:@"prev"];
+  self.firstURL = [h URLForKey:@"rel" value:@"first"];
+  self.lastURL = [h URLForKey:@"rel" value:@"last"];
   [self reset];
-}
-
-- (NSDictionary *)parseLinkHeader:(NSString *)headerField {
-  if(![headerField isKindOfClass:[NSString class]] || [headerField length] == 0)
-    return nil;
-  NSArray *ar = [headerField componentsSeparatedByString:@", "];
-  NSMutableDictionary *buf = [NSMutableDictionary dictionary];
-  for (NSString *sec in ar) {
-    NSArray *kv = [[sec stringByReplacingOccurrencesOfString:@"<" withString:@""] componentsSeparatedByString:@">; rel=\""];
-    if([kv count]==2) {
-      NSString *k = [[kv objectAtIndex:1] stringByReplacingOccurrencesOfString:@"\"" withString:@""];
-      NSString *v = [kv objectAtIndex:0];
-      if([k isKindOfClass:[NSString class]] && [k length] > 0 &&
-         [v isKindOfClass:[NSString class]] && [v length] > 0)
-        [buf setValue:[NSURL URLWithString:v] forKey:k];
-    }
-  }
-  return [buf copy];
 }
 
 @end

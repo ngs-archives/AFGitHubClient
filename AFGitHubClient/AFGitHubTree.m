@@ -1,5 +1,5 @@
 //
-//  AFGitHubAPIRequestOperation.h
+//  AFGitHubTree.m
 //
 //  Copyright (c) 2012 Atsushi Nagase (http://ngs.io/)
 //
@@ -21,11 +21,45 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 //  THE SOFTWARE.
 
-#import "AFJSONRequestOperation.h"
+#import "AFGitHubTree.h"
 
-@class AFGitHubAPIResponse;
-@interface AFGitHubAPIRequestOperation : AFJSONRequestOperation
+@implementation AFGitHubTree
 
-@property (nonatomic, readonly) AFGitHubAPIResponse *ghResponse;
+- (NSArray *)paths {
+  NSMutableArray *buf = @[].mutableCopy;
+  for (AFGitHubGitDataObject* obj in self.objects)
+    [buf addObject:obj.path];
+  [buf sortedArrayUsingSelector:@selector(compare:)];
+  return buf.copy;
+}
+
+- (AFGitHubGitDataObject *)objectAtPath:(NSString *)path {
+  for (AFGitHubGitDataObject* obj in self.objects) {
+    if([obj.path isEqualToString:path])
+      return obj;
+  }
+  return nil;
+}
+
+#pragma mark - NSCopying
+
+- (id)copyWithZone:(NSZone *)zone {
+  id copy = [super copyWithZone:zone];
+  [copy setObjects:self.objects];
+  return copy;
+}
+
+#pragma mark - NSCoding
+
+- (id)initWithCoder:(NSCoder *)aDecoder {
+  if(self = [super initWithCoder:aDecoder]) {
+    self.objects = [aDecoder decodeObjectForKey:@"objects"];
+  }
+  return self;
+}
+
+- (void)encodeWithCoder:(NSCoder *)aCoder {
+  [aCoder encodeObject:self.objects forKey:@"objects"];
+}
 
 @end

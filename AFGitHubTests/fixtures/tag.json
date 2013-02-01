@@ -1,0 +1,16 @@
+{
+  "url": "https://api.github.com/repos/ngs/rb-blink1/git/tags/49f3f9fce0dc4426129db4898a3d8c79b10beec0",
+  "tag": "v0.0.6",
+  "message": "Version 0.0.6\n",
+  "object": {
+    "url": "https://api.github.com/repos/ngs/rb-blink1/git/commits/077941c6f72f7c7f59e8d44bbf6923b813177623",
+    "type": "commit",
+    "sha": "077941c6f72f7c7f59e8d44bbf6923b813177623"
+  },
+  "tagger": {
+    "date": "2013-01-26T00:39:40Z",
+    "email": "atsn.ngs@gmail.com",
+    "name": "Atsushi NAGASE"
+  },
+  "sha": "49f3f9fce0dc4426129db4898a3d8c79b10beec0"
+}

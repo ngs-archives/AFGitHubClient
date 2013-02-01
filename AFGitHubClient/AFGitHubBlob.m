@@ -1,5 +1,5 @@
 //
-//  AFGitHubAPIRequestOperation.h
+//  AFGitHubBlob.m
 //
 //  Copyright (c) 2012 Atsushi Nagase (http://ngs.io/)
 //
@@ -21,11 +21,51 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 //  THE SOFTWARE.
 
-#import "AFJSONRequestOperation.h"
+#import "AFGitHubBlob.h"
+#import "NSData+Base64.h"
+#import "AFGitHubGlobal.h"
 
-@class AFGitHubAPIResponse;
-@interface AFGitHubAPIRequestOperation : AFJSONRequestOperation
+@implementation AFGitHubBlob
 
-@property (nonatomic, readonly) AFGitHubAPIResponse *ghResponse;
+#pragma mark - AFGitHubObject
+
+- (id)initWithDictionary:(NSDictionary *)dictonary {
+  if (self = [super initWithDictionary:dictonary]) {
+    
+  }
+  return self;
+}
+
+
+#pragma mark - Accessors
+
+- (UIImage *)imageContent {
+  return [UIImage imageWithData:self.data];
+}
+
+- (NSString *)content {
+  return [self contentWithEncoding:NSUTF8StringEncoding];
+}
+
+- (void)setContent:(NSString *)content {
+  [self setContent:content withEncoding:NSUTF8StringEncoding];
+}
+
+- (NSString *)contentWithEncoding:(NSStringEncoding)encoding {
+  return [[NSString alloc] initWithData:self.data encoding:encoding];
+}
+
+- (void)setContent:(NSString *)content withEncoding:(NSStringEncoding)encoding {
+  [self setData:[content dataUsingEncoding:encoding]];
+}
+
+- (NSString *)base64Content {
+  return [self.data base64EncodedString];
+}
+
+- (void)setBase64Content:(NSString *)base64Content {
+  [self setData:[NSData dataFromBase64String:base64Content]];
+}
+
 
 @end

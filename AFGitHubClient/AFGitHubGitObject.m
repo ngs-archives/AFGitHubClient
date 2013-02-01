@@ -1,5 +1,5 @@
 //
-//  AFGitHubAPIRequestOperation.h
+//  AFGitHubGitObject.m
 //
 //  Copyright (c) 2012 Atsushi Nagase (http://ngs.io/)
 //
@@ -21,11 +21,40 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 //  THE SOFTWARE.
 
-#import "AFJSONRequestOperation.h"
+#import "AFGitHubGitObject.h"
 
-@class AFGitHubAPIResponse;
-@interface AFGitHubAPIRequestOperation : AFJSONRequestOperation
+@implementation AFGitHubGitObject
 
-@property (nonatomic, readonly) AFGitHubAPIResponse *ghResponse;
+- (id)initWithDictionary:(NSDictionary *)dictonary {
+  if(self = [super init]) {
+    self.SHA = dictonary[@"sha"];
+    self.URL = [NSURL URLWithString:dictonary[@"url"]];
+  }
+  return self;
+}
+
+#pragma mark - NSCopying
+
+- (id)copyWithZone:(NSZone *)zone {
+  id copy = [[self.class alloc] init];
+  [copy setSHA:self.SHA];
+  [copy setURL:self.URL];
+  return copy;
+}
+
+#pragma mark - NSCoding
+
+- (id)initWithCoder:(NSCoder *)aDecoder {
+  if(self = [self init]) {
+    self.SHA = [aDecoder decodeObjectForKey:@"sha"];
+    self.URL = [aDecoder decodeObjectForKey:@"url"];
+  }
+  return self;
+}
+
+- (void)encodeWithCoder:(NSCoder *)aCoder {
+  [aCoder encodeObject:self.URL forKey:@"url"];
+  [aCoder encodeObject:self.SHA forKey:@"sha"];
+}
 
 @end

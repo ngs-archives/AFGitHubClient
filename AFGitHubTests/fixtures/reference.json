@@ -1,0 +1,9 @@
+{
+  "ref": "refs/heads/master",
+  "object": {
+    "type": "commit",
+    "url": "https://api.github.com/repos/ngs/testrepos0001/git/commits/81d98eb3a8ec06189e455c8e308d602815f85dbb",
+    "sha": "81d98eb3a8ec06189e455c8e308d602815f85dbb"
+  },
+  "url": "https://api.github.com/repos/ngs/testrepos0001/git/refs/heads/master"
+}

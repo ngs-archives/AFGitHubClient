@@ -1,5 +1,5 @@
 //
-//  AFGitHubAPIRequestOperation.h
+//  AFGitHubLinkHeader.h
 //
 //  Copyright (c) 2012 Atsushi Nagase (http://ngs.io/)
 //
@@ -21,11 +21,36 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 //  THE SOFTWARE.
 
-#import "AFJSONRequestOperation.h"
+#import <Foundation/Foundation.h>
 
-@class AFGitHubAPIResponse;
-@interface AFGitHubAPIRequestOperation : AFJSONRequestOperation
+@interface AFGitHubLinkHeader : NSObject
 
-@property (nonatomic, readonly) AFGitHubAPIResponse *ghResponse;
+/** Array of links */
+@property (strong) NSArray *links;
+
+/** */
+@property (strong) NSURL *baseURL;
+
+/**  */
+- (id)initWithHeaderField:(NSString *)headerField;
+
+/**  */
+- (id)initWithHeaderField:(NSString *)headerField baseURL:(NSURL *)baseURL;
+
+/**  */
+- (void)parseHeaderField:(NSString *)headerField;
+
+/**
+ *
+ * Single result of URLsForKey:value:
+ */
+- (NSURL *)URLForKey:(NSString *)key value:(NSString *)value;
+
+/**
+ *
+ * @param key The key of attribute eg:rel
+ * @param value The value of attribute eg:first
+ */
+- (NSArray *)URLsForKey:(NSString *)key value:(NSString *)value;
 
 @end
