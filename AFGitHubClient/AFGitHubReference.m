@@ -23,10 +23,18 @@
 
 #import "AFGitHubReference.h"
 #import "AFGitHubGlobal.h"
-#import "AFGitHubComment.h"
+#import "AFGitHubCommit.h"
 #import "AFGitHubTag.h"
 
 @implementation AFGitHubReference
+
+- (id)initWithObject:(AFGitHubGitObject *)object ref:(NSString *)ref {
+  if(self = [super init]) {
+    self.ref = ref;
+    self.object = object;
+  }
+  return self;
+}
 
 - (id)initWithDictionary:(NSDictionary *)dictionary {
   if(self = [super initWithDictionary:dictionary]) {
@@ -40,13 +48,16 @@
       if([type isEqualToString:@"tag"]) {
         self.object = [[AFGitHubTag alloc] initWithDictionary:val];
       } else if([type isEqualToString:@"commit"]) {
-        self.object = [[AFGitHubComment alloc] initWithDictionary:val];
+        self.object = [[AFGitHubCommit alloc] initWithDictionary:val];
       }
     }
   }
   return self;
 }
 
+- (NSDictionary *)asJSON {
+  return @{ @"ref": self.ref, @"sha": self.object.SHA };
+}
 
 #pragma mark - NSCopying
 

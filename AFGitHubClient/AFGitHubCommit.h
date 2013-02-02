@@ -21,10 +21,10 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 //  THE SOFTWARE.
 
-#import "AFGitHubGitObject.h"
+#import "AFGitHubGitDataObject.h"
 
-@class AFGitHubTree, AFGitHubUser;
-@interface AFGitHubCommit : AFGitHubGitObject
+@class AFGitHubTree, AFGitHubUser, AFGitHubBlob;
+@interface AFGitHubCommit : AFGitHubGitDataObject
 
 @property (nonatomic, copy) NSArray *parents;
 @property (nonatomic, copy) AFGitHubTree *tree;
@@ -33,5 +33,11 @@
 @property (nonatomic, copy) NSString *message;
 @property (nonatomic, copy) NSDate *commitedAt;
 @property (nonatomic, copy) NSDate *authedAt;
+
+- (AFGitHubCommit *)createCommitWithTree:(AFGitHubTree *)tree
+                                 message:(NSString *)message;
+
+- (AFGitHubCommit *)createCommitWithAddingBlobs:(NSArray *)blobs
+                                        message:(NSString *)message;
 
 @end

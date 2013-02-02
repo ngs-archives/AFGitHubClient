@@ -26,8 +26,12 @@
 #import "AFGitHubUser.h"
 #import "AFGitHubGlobal.h"
 #import "NSDate+InternetDateTime.h"
+#import "AFGitHubConstants.h"
 
 @implementation AFGitHubCommit
+
+- (NSString *)mode { return AFGitHubDataModeSubmodule; }
+- (NSString *)type { return @"commit"; }
 
 - (id)initWithDictionary:(NSDictionary *)dictionary {
   if(self = [super initWithDictionary:dictionary]) {
@@ -131,6 +135,25 @@
   [aCoder encodeObject:self.message forKey:@"message"];
   [aCoder encodeObject:self.author forKey:@"author"];
   [aCoder encodeObject:self.committer forKey:@"committer"];
+}
+
+#pragma mark -
+
+
+- (AFGitHubCommit *)createCommitWithTree:(AFGitHubTree *)tree
+                                 message:(NSString *)message {
+  AFGitHubCommit *commit = [[AFGitHubCommit alloc] init];
+  [commit setTree:tree];
+  [commit setMessage:message];
+  [commit setParents:@[self]];
+  return commit;
+}
+
+- (AFGitHubCommit *)createCommitWithAddingBlobs:(NSArray *)blobs
+                                        message:(NSString *)message {
+  AFGitHubTree *tree = [self.tree createTreeWithAddingBlobs:blobs];
+  AFGitHubCommit *commit = [self createCommitWithTree:tree message:message];
+  return commit;
 }
 
 @end

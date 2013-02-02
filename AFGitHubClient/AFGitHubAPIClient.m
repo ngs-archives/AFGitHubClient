@@ -92,9 +92,6 @@ static AFGitHubAPIClient *_sharedClient = nil;
   [AFGitHubAPIRequestOperation addAcceptableStatusCodes:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(400, 5)]];
   [AFGitHubAPIRequestOperation addAcceptableStatusCodes:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(422, 1)]];
   [AFGitHubAPIRequestOperation addAcceptableStatusCodes:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(300, 5)]];
-#if __IPHONE_OS_VERSION_MIN_REQUIRED
-  [[AFNetworkActivityIndicatorManager sharedManager] setEnabled:YES];
-#endif
   AFGitHubAPIRequestOperation *op = [[AFGitHubAPIRequestOperation alloc] initWithRequest:request];
   [op setCompletionBlockWithSuccess:success failure:failure];
   return op;
@@ -271,7 +268,13 @@ static AFGitHubAPIClient *_sharedClient = nil;
   [self
    authenticateUsingOAuthWithPath:kAFGitHubAPIAccessTokenPath
    code:code redirectURI:callbackURLString
-   success:success failure:failure];
+   success:^(AFOAuthCredential *credential) {
+     [[NSNotificationCenter defaultCenter]
+      postNotificationName:AFGitHubNotificationAuthenticationSuccess
+      object:self userInfo:@{ @"credential": credential }];
+     success(credential);
+   }
+   failure:failure];
   return YES;
 }
 
@@ -289,12 +292,20 @@ static AFGitHubAPIClient *_sharedClient = nil;
            [scope componentsJoinedByString:@","].URLEncodedString]];
 }
 
+- (void)logout {
+  [self clearAuthorizationHeader];
+  [self clearGitHubCookie];
+  [[NSNotificationCenter defaultCenter]
+   postNotificationName:AFGitHubNotificationAuthenticationCleared
+   object:self userInfo:nil];
+}
+
 #pragma mark - Repos API
 
 - (void)getRepositoriesWithUser:(NSString *)login
-                         parameters:(NSDictionary *)parameters
-                            success:(void (^)(AFGitHubAPIRequestOperation *operation, AFGitHubAPIResponse *responseObject))success
-                            failure:(void (^)(AFGitHubAPIRequestOperation *operation, NSError *error))failure {
+                     parameters:(NSDictionary *)parameters
+                        success:(void (^)(AFGitHubAPIRequestOperation *operation, AFGitHubAPIResponse *responseObject))success
+                        failure:(void (^)(AFGitHubAPIRequestOperation *operation, NSError *error))failure {
   [self getPath:[NSString stringWithFormat:@"/users/%@/repos", login]
      parameters:parameters
       itemClass:[AFGitHubRepository class]
@@ -335,26 +346,13 @@ static AFGitHubAPIClient *_sharedClient = nil;
        gitIgnoreTemplate:(NSString *)gitIgnoreTemplate
                  success:(void (^)(AFGitHubAPIRequestOperation *operation, AFGitHubAPIResponse *responseObject))success
                  failure:(void (^)(AFGitHubAPIRequestOperation *operation, NSError *error))failure {
-  [self createRepository:repository withOrganization:nil
-                  teamId:teamId autoInit:autoInit
-       gitIgnoreTemplate:gitIgnoreTemplate
-                 success:success failure:failure];
-}
-
-- (void)createRepository:(AFGitHubRepository *)repository
-        withOrganization:(NSString *)organizationName
-                  teamId:(NSInteger)teamId
-                autoInit:(BOOL)autoInit
-       gitIgnoreTemplate:(NSString *)gitIgnoreTemplate
-                 success:(void (^)(AFGitHubAPIRequestOperation *operation, AFGitHubAPIResponse *responseObject))success
-                 failure:(void (^)(AFGitHubAPIRequestOperation *operation, NSError *error))failure {
   NSMutableDictionary *params = [repository asJSON].mutableCopy;
   params[@"auto_init"] = [NSNumber numberWithBool:autoInit];
   if(autoInit && AFGitHubIsStringWithAnyText(gitIgnoreTemplate))
     params[@"gitIgnore_template"] = gitIgnoreTemplate;
   if(teamId > 0)
     params[@"team_id"] = [NSNumber numberWithInteger:teamId];
-  NSString *path = AFGitHubIsStringWithAnyText(organizationName) ? [NSString stringWithFormat:@"/orgs/%@/repos", organizationName] : @"/user/repos";
+  NSString *path = [repository.owner isKindOfClass:[AFGitHubOrganization class]] ? [NSString stringWithFormat:@"/orgs/%@/repos", repository.owner.login] : @"/user/repos";
   [self postPath:path
       parameters:params
        itemClass:[AFGitHubRepository class]
@@ -384,9 +382,9 @@ static AFGitHubAPIClient *_sharedClient = nil;
            success:(void (^)(AFGitHubAPIRequestOperation *operation, AFGitHubAPIResponse *responseObject))success
            failure:(void (^)(AFGitHubAPIRequestOperation *operation, NSError *error))failure {
   [self patchPath:@"/user"
-     parameters:[user asJSON]
-      itemClass:[AFGitHubUser class]
-        success:success failure:failure];
+       parameters:[user asJSON]
+        itemClass:[AFGitHubUser class]
+          success:success failure:failure];
 }
 
 - (void)getAllUsersWithSuccess:(void (^)(AFGitHubAPIRequestOperation *operation, AFGitHubAPIResponse *responseObject))success
@@ -433,6 +431,191 @@ static AFGitHubAPIClient *_sharedClient = nil;
        parameters:[organization asJSON]
         itemClass:[AFGitHubOrganization class]
           success:success failure:failure];
+}
+
+#pragma mark - Blobs API
+
+- (void)getBlobWithSHA:(NSString *)SHA
+            repository:(AFGitHubRepository *)repository
+               success:(void (^)(AFGitHubAPIRequestOperation *operation, AFGitHubAPIResponse *responseObject))success
+               failure:(void (^)(AFGitHubAPIRequestOperation *operation, NSError *error))failure {
+  [self
+   getPath:[NSString stringWithFormat:@"/repos/%@/%@/git/blobs/%@",
+            repository.owner.login, repository.name, SHA]
+   parameters:@{}
+   itemClass:[AFGitHubBlob class]
+   success:success
+   failure:failure];
+}
+
+- (void)createBlob:(AFGitHubBlob *)blob
+    withRepository:(AFGitHubRepository *)repository
+           success:(void (^)(AFGitHubAPIRequestOperation *operation, AFGitHubAPIResponse *responseObject))success
+           failure:(void (^)(AFGitHubAPIRequestOperation *operation, NSError *error))failure {
+  [self
+   postPath:[NSString stringWithFormat:@"/repos/%@/%@/git/blobs",
+             repository.owner.login, repository.name]
+   parameters:blob.asJSON
+   itemClass:[AFGitHubBlob class]
+   success:success
+   failure:failure];
+}
+
+
+
+#pragma mark - Trees API
+
+- (void)getTreeWithSHA:(NSString *)SHA
+           recursively:(BOOL)recursively
+            repository:(AFGitHubRepository *)repository
+               success:(void (^)(AFGitHubAPIRequestOperation *operation, AFGitHubAPIResponse *responseObject))success
+               failure:(void (^)(AFGitHubAPIRequestOperation *operation, NSError *error))failure {
+  [self
+   getPath:[NSString stringWithFormat:@"/repos/%@/%@/git/trees/%@",
+            repository.owner.login, repository.name, SHA]
+   parameters: recursively ? @{ @"recursive": @"1" } : @{}
+   itemClass:[AFGitHubTree class]
+   success:success
+   failure:failure];
+}
+
+- (void)createTree:(AFGitHubTree *)tree
+    withRepository:(AFGitHubRepository *)repository
+           success:(void (^)(AFGitHubAPIRequestOperation *operation, AFGitHubAPIResponse *responseObject))success
+           failure:(void (^)(AFGitHubAPIRequestOperation *operation, NSError *error))failure {
+  [self
+   postPath:[NSString stringWithFormat:@"/repos/%@/%@/git/trees",
+             repository.owner.login, repository.name]
+   parameters:tree.asJSON
+   itemClass:[AFGitHubTree class]
+   success:success
+   failure:failure];
+}
+
+
+
+#pragma mark - References API
+
+- (void)getReference:(NSString *)ref
+          repository:(AFGitHubRepository *)repository
+             success:(void (^)(AFGitHubAPIRequestOperation *operation, AFGitHubAPIResponse *responseObject))success
+             failure:(void (^)(AFGitHubAPIRequestOperation *operation, NSError *error))failure {
+  [self
+   getPath:[NSString stringWithFormat:@"/repos/%@/%@/git/%@",
+            repository.owner.login, repository.name, ref]
+   parameters: @{}
+   itemClass:[AFGitHubReference class]
+   success:success
+   failure:failure];
+}
+
+- (void)createReference:(AFGitHubReference *)reference
+             repository:(AFGitHubRepository *)repository
+                success:(void (^)(AFGitHubAPIRequestOperation *operation, AFGitHubAPIResponse *responseObject))success
+                failure:(void (^)(AFGitHubAPIRequestOperation *operation, NSError *error))failure {
+  [self postPath:[NSString stringWithFormat:@"/repos/%@/%@/git/refs",
+                  repository.owner.login, repository.name]
+      parameters:reference.asJSON
+       itemClass:[AFGitHubReference class]
+         success:success
+         failure:failure];
+}
+
+- (void)updateReference:(AFGitHubReference *)reference
+                  force:(BOOL)force
+             repository:(AFGitHubRepository *)repository
+                success:(void (^)(AFGitHubAPIRequestOperation *operation, AFGitHubAPIResponse *responseObject))success
+                failure:(void (^)(AFGitHubAPIRequestOperation *operation, NSError *error))failure {
+  [self patchPath:[NSString stringWithFormat:@"/repos/%@/%@/git/%@",
+                   repository.owner.login, repository.name, reference.ref]
+       parameters:reference.asJSON
+        itemClass:[AFGitHubReference class]
+          success:success
+          failure:failure];
+}
+
+
+#pragma mark - Commits API
+
+- (void)getCommitWithSHA:(NSString *)SHA
+              repository:(AFGitHubRepository *)repository
+                 success:(void (^)(AFGitHubAPIRequestOperation *operation, AFGitHubAPIResponse *responseObject))success
+                 failure:(void (^)(AFGitHubAPIRequestOperation *operation, NSError *error))failure {
+  [self
+   getPath:[NSString stringWithFormat:@"/repos/%@/%@/git/commits/%@",
+            repository.owner.login, repository.name, SHA]
+   parameters: @{}
+   itemClass:[AFGitHubCommit class]
+   success:success
+   failure:failure];
+}
+
+- (void)createCommit:(AFGitHubCommit *)commit
+          repository:(AFGitHubRepository *)repository
+             success:(void (^)(AFGitHubAPIRequestOperation *operation, AFGitHubAPIResponse *responseObject))success
+             failure:(void (^)(AFGitHubAPIRequestOperation *operation, NSError *error))failure {
+  [self
+   postPath:[NSString stringWithFormat:@"/repos/%@/%@/git/commits",
+             repository.owner.login, repository.name]
+   parameters:commit.asJSON
+   itemClass:[AFGitHubCommit class]
+   success:success
+   failure:failure];
+}
+
+
+#pragma mark - Trees + Commits + References API
+
+- (void)createCommitWithTree:(AFGitHubTree *)tree
+                      forRef:(NSString *)refString
+                     message:(NSString *)message
+                       force:(BOOL)force
+                  repository:(AFGitHubRepository *)repository
+                     success:(void (^)(AFGitHubAPIRequestOperation *operation, AFGitHubAPIResponse *responseObject))success
+                     failure:(void (^)(AFGitHubAPIRequestOperation *operation, NSError *error))failure {
+  [self
+   createTree:tree withRepository:repository
+   success:^(AFGitHubAPIRequestOperation *operation, AFGitHubAPIResponse *responseObject) {
+     AFGitHubTree *newTree = [responseObject first];
+     [self
+      getReference:refString
+      repository:repository
+      success:^(AFGitHubAPIRequestOperation *operation, AFGitHubAPIResponse *responseObject) {
+        AFGitHubReference *ref = [responseObject first];
+        AFGitHubCommit *commit = [[AFGitHubCommit alloc] init];
+        commit.parents = @[ref.object];
+        commit.tree = newTree;
+        commit.message = message;
+        [self
+         createCommit:commit
+         repository:repository
+         success:^(AFGitHubAPIRequestOperation *operation, AFGitHubAPIResponse *responseObject) {
+           ref.object = responseObject.first;
+           [self updateReference:ref force:force repository:repository success:success failure:failure];
+         }
+         failure:failure];
+        
+      }
+      failure:^(AFGitHubAPIRequestOperation *operation, NSError *error) {
+        if(error.code == 404) {
+          AFGitHubCommit *commit = [[AFGitHubCommit alloc] init];
+          commit.tree = newTree;
+          commit.message = message;
+          [self
+           createCommit:commit
+           repository:repository
+           success:^(AFGitHubAPIRequestOperation *operation, AFGitHubAPIResponse *responseObject) {
+             AFGitHubReference *ref = [[AFGitHubReference alloc] initWithObject:responseObject.first ref:refString];
+             [self createReference:ref repository:repository success:success failure:failure];
+           }
+           failure:failure];
+        } else {
+          failure(operation, error);
+        }
+      }];
+   }
+   failure:failure];
+  
 }
 
 

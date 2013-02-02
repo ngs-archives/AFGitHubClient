@@ -23,9 +23,12 @@
 
 #import "AFGitHubGitObject.h"
 
+@class AFGitHubGitObject;
 @interface AFGitHubReference : AFGitHubGitObject
 
+- (id)initWithObject:(AFGitHubGitObject *)object ref:(NSString *)ref;
+
 @property (nonatomic, copy) NSString *ref;
-@property (nonatomic, copy) id<AFGitHubObject> object;
+@property (nonatomic, copy) AFGitHubGitObject *object;
 
 @end

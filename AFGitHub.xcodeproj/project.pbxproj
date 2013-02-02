@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		851B42BA16BD86CB0029AEFA /* AFGitHubAccount.m in Sources */ = {isa = PBXBuildFile; fileRef = 851B42B916BD86CB0029AEFA /* AFGitHubAccount.m */; };
 		85C67A8A16BA183C009CC38D /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 85C67A8916BA183C009CC38D /* UIKit.framework */; };
 		85C67A8C16BA183C009CC38D /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 85C67A8B16BA183C009CC38D /* Foundation.framework */; };
 		85C67A8E16BA183C009CC38D /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 85C67A8D16BA183C009CC38D /* CoreGraphics.framework */; };
@@ -72,6 +73,8 @@
 /* Begin PBXFileReference section */
 		35A32EE6687A42F2BEC3B5C9 /* Pods.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.xcconfig; path = Pods/Pods.xcconfig; sourceTree = SOURCE_ROOT; };
 		6B04A6AC7B2846268AF0689B /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		851B42B816BD86CB0029AEFA /* AFGitHubAccount.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AFGitHubAccount.h; sourceTree = "<group>"; };
+		851B42B916BD86CB0029AEFA /* AFGitHubAccount.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AFGitHubAccount.m; sourceTree = "<group>"; };
 		85C67A8616BA183C009CC38D /* AFGitHubSamples.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AFGitHubSamples.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		85C67A8916BA183C009CC38D /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		85C67A8B16BA183C009CC38D /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -185,6 +188,19 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		851B42BB16BD86D70029AEFA /* Account */ = {
+			isa = PBXGroup;
+			children = (
+				851B42B816BD86CB0029AEFA /* AFGitHubAccount.h */,
+				851B42B916BD86CB0029AEFA /* AFGitHubAccount.m */,
+				85C67B8516BB4B12009CC38D /* AFGitHubUser.h */,
+				85C67B8616BB4B12009CC38D /* AFGitHubUser.m */,
+				85C67C3816BD25AE009CC38D /* AFGitHubOrganization.h */,
+				85C67C3916BD25AE009CC38D /* AFGitHubOrganization.m */,
+			);
+			name = Account;
+			sourceTree = "<group>";
+		};
 		85C67A7D16BA183C009CC38D = {
 			isa = PBXGroup;
 			children = (
@@ -298,6 +314,7 @@
 		85C67ACF16BA23E3009CC38D /* Data */ = {
 			isa = PBXGroup;
 			children = (
+				851B42BB16BD86D70029AEFA /* Account */,
 				85C67B9516BB9DE0009CC38D /* Category */,
 				85C67B8B16BB4C24009CC38D /* Git Data */,
 				85C67AD016BA23F8009CC38D /* AFGitHubObject.h */,
@@ -305,12 +322,8 @@
 				85C67B8216BB4AFB009CC38D /* AFGitHubRepository.h */,
 				85C67B8316BB4AFB009CC38D /* AFGitHubRepository.m */,
 				85C67B8016BB4AE1009CC38D /* AFGitHubPullRequest.m */,
-				85C67B8516BB4B12009CC38D /* AFGitHubUser.h */,
-				85C67B8616BB4B12009CC38D /* AFGitHubUser.m */,
 				85C67B8C16BB4D5C009CC38D /* AFGitHubComment.h */,
 				85C67B8D16BB4D5D009CC38D /* AFGitHubComment.m */,
-				85C67C3816BD25AE009CC38D /* AFGitHubOrganization.h */,
-				85C67C3916BD25AE009CC38D /* AFGitHubOrganization.m */,
 				85C67C3B16BD2FDE009CC38D /* AFGitHubAPIError.h */,
 				85C67C3C16BD2FDF009CC38D /* AFGitHubAPIError.m */,
 			);
@@ -545,6 +558,7 @@
 				85C67C3716BD2429009CC38D /* AFGitHubCreateRepositoryViewController.m in Sources */,
 				85C67C3A16BD25AE009CC38D /* AFGitHubOrganization.m in Sources */,
 				85C67C3D16BD2FDF009CC38D /* AFGitHubAPIError.m in Sources */,
+				851B42BA16BD86CB0029AEFA /* AFGitHubAccount.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

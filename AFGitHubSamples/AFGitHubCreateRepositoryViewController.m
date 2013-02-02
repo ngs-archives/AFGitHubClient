@@ -7,7 +7,6 @@
 //
 
 #import "AFGitHubCreateRepositoryViewController.h"
-#import "AFGitHubOwnerSelectViewController.h"
 #import "AFGitHub.h"
 #import "AFGitHubGlobal.h"
 #import <SVProgressHUD/SVProgressHUD.h>
@@ -35,7 +34,7 @@
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
   if([segue.destinationViewController isKindOfClass:[AFGitHubOwnerSelectViewController class]]) {
     AFGitHubOwnerSelectViewController *vc = (AFGitHubOwnerSelectViewController *)segue.destinationViewController;
-    [vc setCreateViewController:self];
+    [vc setDelegate:self];
     [vc setUser:self.user];
   }
 }
@@ -86,34 +85,19 @@
   repo.name = self.nameTextField.text;
   repo.repositoryDescription = self.descriptionTextField.text;
   [SVProgressHUD showWithStatus:@"Creating repository" maskType:SVProgressHUDMaskTypeGradient];
-  if(self.organization) {
-    [client
-     createRepository:repo
-     withOrganization:self.organization.login
-     teamId:0
-     autoInit:NO
-     gitIgnoreTemplate:nil
-     success:^(AFGitHubAPIRequestOperation *operation, AFGitHubAPIResponse *responseObject) {
-       [SVProgressHUD showSuccessWithStatus:@"Created!"];
-       [self.navigationController popToRootViewControllerAnimated:YES];
-     }
-     failure:^(AFGitHubAPIRequestOperation *operation, NSError *error) {
-       [SVProgressHUD showErrorWithStatus:error.localizedDescription];
-     }];
-  } else {
-    [client
-     createRepository:repo
-     withTeamId:0
-     autoInit:NO
-     gitIgnoreTemplate:nil
-     success:^(AFGitHubAPIRequestOperation *operation, AFGitHubAPIResponse *responseObject) {
-       [SVProgressHUD showSuccessWithStatus:@"Created!"];
-       [self.navigationController popToRootViewControllerAnimated:YES];
-     }
-     failure:^(AFGitHubAPIRequestOperation *operation, NSError *error) {
-       [SVProgressHUD showErrorWithStatus:error.localizedDescription];
-     }];
-  }
+  repo.owner = self.organization ? self.organization : self.user;
+  [client
+   createRepository:repo
+   withTeamId:0
+   autoInit:NO
+   gitIgnoreTemplate:nil
+   success:^(AFGitHubAPIRequestOperation *operation, AFGitHubAPIResponse *responseObject) {
+     [SVProgressHUD showSuccessWithStatus:@"Created!"];
+     [self.navigationController popToRootViewControllerAnimated:YES];
+   }
+   failure:^(AFGitHubAPIRequestOperation *operation, NSError *error) {
+     [SVProgressHUD showErrorWithStatus:error.localizedDescription];
+   }];
 }
 
 #pragma mark -

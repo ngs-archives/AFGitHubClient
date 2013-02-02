@@ -22,6 +22,7 @@
 //  THE SOFTWARE.
 
 #import "AFGitHubConstants.h"
+#import "AFGitHubAccount.h"
 #import "AFGitHubAPIClient.h"
 #import "AFGitHubAPIRequestOperation.h"
 #import "AFGitHubAPIResponse.h"

@@ -21,12 +21,7 @@
      [[UIBarButtonItem alloc]
       initWithTitle:@"Logout" style:UIBarButtonItemStyleBordered
       handler:^(id sender) {
-        [client clearAuthorizationHeader];
-        [client clearGitHubCookie];
-        [[NSUserDefaults standardUserDefaults] removeObjectForKey:AFGitHubDefaultsAccessTokenKey];
-        [[NSNotificationCenter defaultCenter]
-         postNotificationName:AFNotificationGitHubAuthenticationCleared
-         object:client userInfo:nil];
+        [client logout];
       }]];
   } else {
     [self.navigationItem setRightBarButtonItem:

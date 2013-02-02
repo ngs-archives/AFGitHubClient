@@ -100,10 +100,10 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
   if(indexPath.row == 0) {
-    self.createViewController.organization = nil;
+    [self.delegate setOrganization:nil];
   } else if(indexPath.row <= self.orgs.count) {
     AFGitHubOrganization *org = self.orgs[indexPath.row - 1];
-    self.createViewController.organization = org;
+    [self.delegate setOrganization:org];
   }
   [self.navigationController popViewControllerAnimated:YES];
 }

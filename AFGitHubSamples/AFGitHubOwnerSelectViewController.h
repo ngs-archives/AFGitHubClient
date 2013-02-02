@@ -8,10 +8,18 @@
 
 #import <UIKit/UIKit.h>
 
-@class AFGitHubUser, AFGitHubCreateRepositoryViewController;
+@class AFGitHubUser, AFGitHubCreateRepositoryViewController, AFGitHubOrganization;
+
+
+@protocol AFGithubOwnerSelectDelegate <NSObject>
+
+- (void)setOrganization:(AFGitHubOrganization *)organization;
+
+@end
+
 @interface AFGitHubOwnerSelectViewController : UITableViewController
 
-@property (nonatomic, unsafe_unretained) AFGitHubCreateRepositoryViewController *createViewController;
+@property (nonatomic, unsafe_unretained) id<AFGithubOwnerSelectDelegate> delegate;
 @property (nonatomic, copy) AFGitHubUser *user;
 
 @end

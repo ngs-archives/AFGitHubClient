@@ -25,6 +25,7 @@
 
 @interface AFGitHubGitDataObject : AFGitHubGitObject
 
+@property (nonatomic, readonly) NSString *type;
 @property (nonatomic, copy) NSString *path;
 @property (nonatomic, copy) NSString *mode;
 

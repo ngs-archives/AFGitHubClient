@@ -8,16 +8,17 @@
 
 #import "AFGitHubAuthViewController.h"
 #import "AFGitHubAPIKeys.h"
-#import "AFGitHubSampleConstants.h"
 #import "AFGitHub.h"
+#import <SVProgressHUD/SVProgressHUD.h>
 
 @implementation AFGitHubAuthViewController
 
 - (void)viewDidAppear:(BOOL)animated {
   [super viewDidAppear:animated];
   if(!self.webView.request) {
-    NSURL *URL = [[AFGitHubAPIClient sharedClient] authURLWithCallbackURLString:kAFGitHubCallbackURL
-                                                                          scope:@[@"repo"]];
+    NSURL *URL = [[AFGitHubAPIClient sharedClient]
+                  authURLWithCallbackURLString:kAFGitHubCallbackURL
+                  scope:@[@"repo"]];
     [self.webView loadRequest:[NSURLRequest requestWithURL:URL]];
   }
 }
@@ -30,19 +31,16 @@
       handleOpenURL:request.URL
       withCallbackURLString:kAFGitHubCallbackURL
       success:^(AFOAuthCredential *credential) {
-        [[NSNotificationCenter defaultCenter]
-         postNotificationName:AFNotificationGitHubAuthenticationSuccess
-         object:client userInfo:@{ @"credential": credential }];
-        [[NSUserDefaults standardUserDefaults] setObject:credential.accessToken forKey:AFGitHubDefaultsAccessTokenKey];
         [self dismissViewControllerAnimated:YES completion:nil];
+        [SVProgressHUD dismiss];
       }
       failure:^(NSError *error) {
-      }])
-    return NO;
-  [[UIApplication sharedApplication] openURL:request.URL];
+        [SVProgressHUD showErrorWithStatus:error.localizedDescription];
+      }]) {
+        [SVProgressHUD showWithStatus:@"Requesting access token..."
+                             maskType:SVProgressHUDMaskTypeGradient];
+      }
   return NO;
 }
-
-
 
 @end

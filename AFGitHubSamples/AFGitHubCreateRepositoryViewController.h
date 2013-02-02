@@ -7,9 +7,10 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "AFGitHubOwnerSelectViewController.h"
 
 @class AFGitHubUser, AFGitHubOrganization;
-@interface AFGitHubCreateRepositoryViewController : UITableViewController<UITextFieldDelegate>
+@interface AFGitHubCreateRepositoryViewController : UITableViewController<UITextFieldDelegate, AFGithubOwnerSelectDelegate>
 
 @property (weak, nonatomic) IBOutlet UITextField *nameTextField;
 @property (weak, nonatomic) IBOutlet UITextField *descriptionTextField;

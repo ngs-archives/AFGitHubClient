@@ -44,11 +44,25 @@ didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
   if(AFGitHubIsStringWithAnyText(accessToken))
     [client setAuthorizationHeaderWithToken:accessToken];
   [AFGitHubAPIClient setSharedClient:client];
+  NSNotificationCenter *nc = [NSNotificationCenter defaultCenter];
+  [nc addObserver:self selector:@selector(didLogin:) name:AFGitHubNotificationAuthenticationSuccess object:nil];
+  [nc addObserver:self selector:@selector(didLogout:) name:AFGitHubNotificationAuthenticationCleared object:nil];
   return YES;
 }
 
 - (void)applicationWillResignActive:(UIApplication *)application {
   [[NSUserDefaults standardUserDefaults] synchronize];
+}
+
+#pragma mark - Notification Observer
+
+- (void)didLogin:(NSNotification *)note {
+  AFOAuthCredential *credential = note.userInfo[@"credential"];
+  [[NSUserDefaults standardUserDefaults] setObject:credential.accessToken forKey:AFGitHubDefaultsAccessTokenKey];
+}
+
+- (void)didLogout:(NSNotification *)note {
+  [[NSUserDefaults standardUserDefaults] removeObjectForKey:AFGitHubDefaultsAccessTokenKey];
 }
 
 @end

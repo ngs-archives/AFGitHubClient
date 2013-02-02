@@ -23,3 +23,11 @@
 
 #import <Foundation/Foundation.h>
 
+#define AFGitHubNotificationAuthenticationCleared @"AFGitHubNotificationAuthenticationCleared"
+#define AFGitHubNotificationAuthenticationSuccess @"AFGitHubNotificationAuthenticationSuccess"
+
+#define AFGitHubDataModeExecutable   @"100755"
+#define AFGitHubDataModeFile         @"100644"
+#define AFGitHubDataModeSubdirectory @"040000"
+#define AFGitHubDataModeSubmodule    @"160000"
+#define AFGitHubDataModeSymlink      @"120000"

@@ -15,5 +15,3 @@ typedef enum {
 } AFGitHubRepoOwner;
 
 #define AFGitHubDefaultsAccessTokenKey @"AFGitHubDefaultsAccessToken"
-#define AFNotificationGitHubAuthenticationCleared @"AFNotificationGitHubAuthenticationCleared"
-#define AFNotificationGitHubAuthenticationSuccess @"AFNotificationGitHubAuthenticationSuccess"

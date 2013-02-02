@@ -30,6 +30,12 @@
 
 #pragma mark -
 
+- (NSURL *)gitHubPagesURL {
+  return self.isGitHubPages ?
+  [NSURL URLWithString:[NSString stringWithFormat:@"http://%@.github.com/", self.owner.login]] :
+  [NSURL URLWithString:[NSString stringWithFormat:@"http://%@.github.com/%@", self.owner.login, self.name]];
+}
+
 - (BOOL)pushPermission {
   return [self.permissions isKindOfClass:[NSDictionary class]] &&
   AFGitHubIsStringWithAnyText(self.permissions[@"push"]) &&
@@ -96,7 +102,7 @@
     val = dictionary[@"blobs_url"];
     if(AFGitHubIsStringWithAnyText(val)) self.blobsURL = [NSURL URLWithString:val];
     val = dictionary[@"owner"];
-    if([val isKindOfClass:[NSDictionary class]]) self.owner = [[AFGitHubUser alloc] initWithDictionary:val];
+    if([val isKindOfClass:[NSDictionary class]]) self.owner = [AFGitHubAccount accountWithDictionary:val];
     val = dictionary[@"permissions"];
     if([val isKindOfClass:[NSDictionary class]]) self.permissions = val;
     val = dictionary[@"ssh_url"];

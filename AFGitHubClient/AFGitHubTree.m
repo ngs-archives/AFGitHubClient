@@ -23,10 +23,14 @@
 
 #import "AFGitHubTree.h"
 #import "AFGitHubGlobal.h"
-#import "AFGitHubTree.h"
 #import "AFGitHubBlob.h"
+#import "AFGitHubComment.h"
+#import "AFGitHubConstants.h"
 
 @implementation AFGitHubTree
+
+- (NSString *)mode { return AFGitHubDataModeSubdirectory; }
+- (NSString *)type { return @"tree"; }
 
 - (id)initWithDictionary:(NSDictionary *)dictonary {
   if(self = [super initWithDictionary:dictonary]) {
@@ -41,6 +45,22 @@
     }
   }
   return self;
+}
+
+- (NSDictionary *)asJSON {
+  NSMutableDictionary *dict = @{}.mutableCopy;
+  NSMutableArray *buf = @[].mutableCopy;
+  if(self.baseTree && AFGitHubIsStringWithAnyText(self.baseTree.SHA))
+    dict[@"base_tree"] = self.baseTree.SHA;
+  for (AFGitHubGitDataObject *obj in self.objects) {
+    NSMutableDictionary *mdic = [[obj asJSON] mutableCopy];
+    mdic[@"mode"] = obj.mode;
+    mdic[@"type"] = obj.type;
+    mdic[@"path"] = obj.path;
+    [buf addObject:mdic.copy];
+  }
+  dict[@"tree"] = buf.copy;
+  return dict.copy;
 }
 
 - (NSArray *)paths {
@@ -78,6 +98,19 @@
 
 - (void)encodeWithCoder:(NSCoder *)aCoder {
   [aCoder encodeObject:self.objects forKey:@"objects"];
+}
+
+#pragma mark - 
+
+- (AFGitHubTree *)createTreeWithAddingBlobs:(NSArray *)blobs {
+  AFGitHubTree *tree = [[AFGitHubTree alloc] init];
+  tree.baseTree = self;
+  NSMutableArray *buf = [self.objects mutableCopy];
+  for (AFGitHubBlob *blob in blobs) {
+    [buf addObject:blob];
+  }
+  tree.objects = [buf copy];
+  return tree;
 }
 
 @end

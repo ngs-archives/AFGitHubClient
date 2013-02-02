@@ -46,7 +46,8 @@ static dispatch_queue_t github_request_operation_processing_queue() {
 
 - (id)responseJSON {
   id json = [super responseJSON];
-  if([json isKindOfClass:[NSDictionary class]] &&
+  if(self.response.statusCode >= 400 &&
+     [json isKindOfClass:[NSDictionary class]] &&
      json[@"message"] &&
      [json[@"message"] isKindOfClass:[NSString class]] &&
      [json[@"message"] length] > 0) {

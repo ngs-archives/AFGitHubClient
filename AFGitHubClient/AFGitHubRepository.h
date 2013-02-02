@@ -24,8 +24,45 @@
 #import <Foundation/Foundation.h>
 #import "AFGitHubObject.h"
 
-@class AFGitHubUser;
+@class AFGitHubAccount,
+AFGitHubAPIRequestOperation,
+AFGitHubBlob,
+AFGitHubTree,
+AFGitHubAPIResponse;
 @interface AFGitHubRepository : NSObject<AFGitHubObject>
+
+- (NSURL *)gitHubPagesURL;
+
+#pragma mark - Repos API
+
+- (void)createWithTeamId:(NSInteger)teamId
+                autoInit:(BOOL)autoInit
+       gitIgnoreTemplate:(NSString *)gitIgnoreTemplate
+                 success:(void (^)(AFGitHubAPIRequestOperation *operation, AFGitHubAPIResponse *responseObject))success
+                 failure:(void (^)(AFGitHubAPIRequestOperation *operation, NSError *error))failure;
+
+
+#pragma mark - Blobs API
+
+- (void)getBlobWithSHA:(NSString *)SHA
+               success:(void (^)(AFGitHubAPIRequestOperation *operation, AFGitHubAPIResponse *responseObject))success
+               failure:(void (^)(AFGitHubAPIRequestOperation *operation, NSError *error))failure;
+
+- (void)createBlob:(AFGitHubBlob *)blob
+           success:(void (^)(AFGitHubAPIRequestOperation *operation, AFGitHubAPIResponse *responseObject))success
+           failure:(void (^)(AFGitHubAPIRequestOperation *operation, NSError *error))failure;
+
+
+#pragma mark - Trees API
+
+- (void)getTreeWithSHA:(NSString *)SHA
+           recursively:(BOOL)recursively
+               success:(void (^)(AFGitHubAPIRequestOperation *operation, AFGitHubAPIResponse *responseObject))success
+               failure:(void (^)(AFGitHubAPIRequestOperation *operation, NSError *error))failure;
+
+- (void)createTree:(AFGitHubTree *)tree
+           success:(void (^)(AFGitHubAPIRequestOperation *operation, AFGitHubAPIResponse *responseObject))success
+           failure:(void (^)(AFGitHubAPIRequestOperation *operation, NSError *error))failure;
 
 @property (nonatomic, assign) BOOL hasDownloads;
 @property (nonatomic, assign) BOOL hasIssues;
@@ -38,7 +75,7 @@
 @property (nonatomic, assign) NSInteger repositoryId;
 @property (nonatomic, assign) NSInteger size;
 @property (nonatomic, assign) NSInteger watchersCount;
-@property (nonatomic, copy) AFGitHubUser *owner;
+@property (nonatomic, copy) AFGitHubAccount *owner;
 @property (nonatomic, copy) NSDate *createdAt;
 @property (nonatomic, copy) NSDate *pushedAt;
 @property (nonatomic, copy) NSDate *updatedAt;

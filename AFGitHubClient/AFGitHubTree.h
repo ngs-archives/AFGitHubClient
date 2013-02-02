@@ -21,14 +21,15 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 //  THE SOFTWARE.
 
-#import "AFGitHubGitObject.h"
 #import "AFGitHubGitDataObject.h"
 
-@interface AFGitHubTree : AFGitHubGitObject
+@interface AFGitHubTree : AFGitHubGitDataObject
 
 @property (nonatomic, copy) NSMutableArray *objects;
+@property (nonatomic, copy) AFGitHubTree *baseTree;
 
 - (NSArray *)paths;
 - (AFGitHubGitDataObject *)objectAtPath:(NSString *)path;
+- (AFGitHubTree *)createTreeWithAddingBlobs:(NSArray *)blobs;
 
 @end

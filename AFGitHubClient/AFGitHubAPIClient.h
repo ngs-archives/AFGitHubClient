@@ -24,7 +24,15 @@
 #import "AFOAuth2Client.h"
 #import "AFGitHubConstants.h"
 
-@class AFGitHubAPIRequestOperation, AFGitHubRepository, AFGitHubUser, AFGitHubOrganization, AFGitHubAPIResponse;
+@class AFGitHubAPIRequestOperation,
+AFGitHubRepository,
+AFGitHubUser,
+AFGitHubOrganization,
+AFGitHubAPIResponse,
+AFGitHubReference,
+AFGitHubBlob,
+AFGitHubCommit,
+AFGitHubTree;
 @interface AFGitHubAPIClient : AFOAuth2Client
 
 + (AFGitHubAPIClient *)clientWithClientID:(NSString *)clientID secret:(NSString *)secret;
@@ -50,6 +58,8 @@
 itemClass:(Class)class
 success:(void (^)(AFGitHubAPIRequestOperation *operation, AFGitHubAPIResponse *responseObject))success
 failure:(void (^)(AFGitHubAPIRequestOperation *operation, NSError *error))failure;
+
+- (void)logout;
 
 #pragma mark - HTTP Verbs
 
@@ -117,14 +127,6 @@ failure:(void (^)(AFGitHubAPIRequestOperation *operation, NSError *error))failur
                  success:(void (^)(AFGitHubAPIRequestOperation *operation, AFGitHubAPIResponse *responseObject))success
                  failure:(void (^)(AFGitHubAPIRequestOperation *operation, NSError *error))failure;
 
-- (void)createRepository:(AFGitHubRepository *)repository
-        withOrganization:(NSString *)organizationName
-                  teamId:(NSInteger)teamId
-                autoInit:(BOOL)autoInit
-       gitIgnoreTemplate:(NSString *)gitIgnoreTemplate
-                 success:(void (^)(AFGitHubAPIRequestOperation *operation, AFGitHubAPIResponse *responseObject))success
-                 failure:(void (^)(AFGitHubAPIRequestOperation *operation, NSError *error))failure;
-
 #pragma mark - Users API
 
 - (void)getUser:(NSString *)login
@@ -160,8 +162,69 @@ failure:(void (^)(AFGitHubAPIRequestOperation *operation, NSError *error))failur
                    success:(void (^)(AFGitHubAPIRequestOperation *operation, AFGitHubAPIResponse *responseObject))success
                    failure:(void (^)(AFGitHubAPIRequestOperation *operation, NSError *error))failure;
 
+#pragma mark - Blobs API
 
+- (void)getBlobWithSHA:(NSString *)SHA
+            repository:(AFGitHubRepository *)repository
+               success:(void (^)(AFGitHubAPIRequestOperation *operation, AFGitHubAPIResponse *responseObject))success
+               failure:(void (^)(AFGitHubAPIRequestOperation *operation, NSError *error))failure;
 
+- (void)createBlob:(AFGitHubBlob *)blob
+    withRepository:(AFGitHubRepository *)repository
+           success:(void (^)(AFGitHubAPIRequestOperation *operation, AFGitHubAPIResponse *responseObject))success
+           failure:(void (^)(AFGitHubAPIRequestOperation *operation, NSError *error))failure;
 
+#pragma mark - Trees API
+
+- (void)getTreeWithSHA:(NSString *)SHA
+           recursively:(BOOL)recursively
+            repository:(AFGitHubRepository *)repository
+               success:(void (^)(AFGitHubAPIRequestOperation *operation, AFGitHubAPIResponse *responseObject))success
+               failure:(void (^)(AFGitHubAPIRequestOperation *operation, NSError *error))failure;
+
+- (void)createTree:(AFGitHubTree *)tree
+    withRepository:(AFGitHubRepository *)repository
+           success:(void (^)(AFGitHubAPIRequestOperation *operation, AFGitHubAPIResponse *responseObject))success
+           failure:(void (^)(AFGitHubAPIRequestOperation *operation, NSError *error))failure;
+
+#pragma mark - References API
+
+- (void)getReference:(NSString *)ref
+          repository:(AFGitHubRepository *)repository
+             success:(void (^)(AFGitHubAPIRequestOperation *operation, AFGitHubAPIResponse *responseObject))success
+             failure:(void (^)(AFGitHubAPIRequestOperation *operation, NSError *error))failure;
+
+- (void)createReference:(AFGitHubReference *)reference
+             repository:(AFGitHubRepository *)repository
+                success:(void (^)(AFGitHubAPIRequestOperation *operation, AFGitHubAPIResponse *responseObject))success
+                failure:(void (^)(AFGitHubAPIRequestOperation *operation, NSError *error))failure;
+
+- (void)updateReference:(AFGitHubReference *)reference
+                  force:(BOOL)force
+             repository:(AFGitHubRepository *)repository
+                success:(void (^)(AFGitHubAPIRequestOperation *operation, AFGitHubAPIResponse *responseObject))success
+                failure:(void (^)(AFGitHubAPIRequestOperation *operation, NSError *error))failure;
+
+#pragma mark - Commits API
+
+- (void)getCommitWithSHA:(NSString *)SHA
+              repository:(AFGitHubRepository *)repository
+                 success:(void (^)(AFGitHubAPIRequestOperation *operation, AFGitHubAPIResponse *responseObject))success
+                 failure:(void (^)(AFGitHubAPIRequestOperation *operation, NSError *error))failure;
+
+- (void)createCommit:(AFGitHubCommit *)commit
+          repository:(AFGitHubRepository *)repository
+             success:(void (^)(AFGitHubAPIRequestOperation *operation, AFGitHubAPIResponse *responseObject))success
+             failure:(void (^)(AFGitHubAPIRequestOperation *operation, NSError *error))failure;
+
+#pragma mark - Trees + Commits + References API
+
+- (void)createCommitWithTree:(AFGitHubTree *)tree
+                      forRef:(NSString *)refString
+                     message:(NSString *)message
+                       force:(BOOL)force
+                  repository:(AFGitHubRepository *)repository
+                     success:(void (^)(AFGitHubAPIRequestOperation *operation, AFGitHubAPIResponse *responseObject))success
+                     failure:(void (^)(AFGitHubAPIRequestOperation *operation, NSError *error))failure;
 
 @end

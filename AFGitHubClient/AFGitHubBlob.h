@@ -21,16 +21,48 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 //  THE SOFTWARE.
 
-#import "AFGitHubGitObject.h"
+#import "AFGitHubGitDataObject.h"
+#if __IPHONE_OS_VERSION_MIN_REQUIRED
+#import <UIKit/UIKit.h>
+#else
+#import <Cocoa/Cocoa.h>
+#endif
 
-@interface AFGitHubBlob : AFGitHubGitObject
+
+
+
+@interface AFGitHubBlob : AFGitHubGitDataObject
 
 @property (nonatomic, copy) NSData *data;
 @property (nonatomic, copy) NSString *base64Content;
 @property (nonatomic, copy) NSString *content;
+#if __IPHONE_OS_VERSION_MIN_REQUIRED
 @property (nonatomic, copy) UIImage *imageContent;
+#else
+@property (nonatomic, copy) NSImage *imageContent;
+#endif
 @property (nonatomic, assign) NSInteger size;
 
 - (NSString *)contentWithEncoding:(NSStringEncoding)encoding;
+
+- (id)initWithContent:(NSString *)content
+                 mode:(NSString *)mode
+                 path:(NSString *)path;
+
+#if __IPHONE_OS_VERSION_MIN_REQUIRED
+
+- (void)setJPEGImageContent:(UIImage *)imageContent
+     withCompressionQuality:(CGFloat)quality;
+
+- (void)setPNGImageContent:(UIImage *)imageContent;
+
+#else
+
+- (void)setJPEGImageContent:(NSImage *)imageContent
+     withCompressionQuality:(CGFloat)quality;
+
+- (void)setPNGImageContent:(NSImage *)imageContent;
+
+#endif
 
 @end

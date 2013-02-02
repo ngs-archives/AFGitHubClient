@@ -24,10 +24,24 @@
 #import "AFGitHubBlob.h"
 #import "NSData+Base64.h"
 #import "AFGitHubGlobal.h"
+#import "AFGitHubConstants.h"
 
 @implementation AFGitHubBlob
 
 #pragma mark - AFGitHubObject
+
+- (NSString *)type { return @"blob"; }
+
+- (id)initWithContent:(NSString *)content
+                 mode:(NSString *)mode
+                 path:(NSString *)path {
+  if(self = [super init]) {
+    self.content = content;
+    self.mode = mode ? mode : AFGitHubDataModeFile;
+    self.path = path;
+  }
+  return self;
+}
 
 - (id)initWithDictionary:(NSDictionary *)dictonary {
   if (self = [super initWithDictionary:dictonary]) {
@@ -49,9 +63,14 @@
 }
 
 - (NSDictionary *)asJSON {
-  NSString *content = self.base64Content;
-  return AFGitHubIsStringWithAnyText(content) ?
-  @{ @"content": content, @"encoding": @"base64" } : @{};
+  NSMutableDictionary *dict = @{}.mutableCopy;
+  if(AFGitHubIsStringWithAnyText(self.SHA))
+    dict[@"sha"] = self.SHA;
+  else if(AFGitHubIsStringWithAnyText(self.content)) {
+    dict[@"content"] = self.base64Content;
+    dict[@"encoding"] = @"base64";
+  }
+  return dict.copy;
 }
 
 #pragma mark - Accessors
@@ -59,6 +78,39 @@
 - (UIImage *)imageContent {
   return [UIImage imageWithData:self.data];
 }
+
+
+#if __IPHONE_OS_VERSION_MIN_REQUIRED
+
+- (void)setImageContent:(UIImage *)imageContent {
+  [self setPNGImageContent:imageContent];
+}
+
+- (void)setJPEGImageContent:(UIImage *)imageContent
+     withCompressionQuality:(CGFloat)quality {
+  [self setData:UIImageJPEGRepresentation(imageContent, quality)];
+}
+
+- (void)setPNGImageContent:(UIImage *)imageContent {
+  [self setData:UIImagePNGRepresentation(imageContent)];
+}
+
+#else
+
+- (void)setImageContent:(NSImage *)imageContent {
+  [self setPNGImageContent:imageContent];
+}
+
+- (void)setJPEGImageContent:(NSImage *)imageContent
+     withCompressionQuality:(CGFloat)quality {
+  // TODO
+}
+
+- (void)setPNGImageContent:(NSImage *)imageContent {
+  // TODO
+}
+
+#endif
 
 - (NSString *)content {
   return [self contentWithEncoding:NSUTF8StringEncoding];
