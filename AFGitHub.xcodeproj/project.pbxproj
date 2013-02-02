@@ -46,6 +46,7 @@
 		85C67BA616BBA434009CC38D /* repository.json in Resources */ = {isa = PBXBuildFile; fileRef = 85C67BA016BBA434009CC38D /* repository.json */; };
 		85C67BA716BBA434009CC38D /* tag.json in Resources */ = {isa = PBXBuildFile; fileRef = 85C67BA116BBA434009CC38D /* tag.json */; };
 		85C67BA816BBA434009CC38D /* tree.json in Resources */ = {isa = PBXBuildFile; fileRef = 85C67BA216BBA434009CC38D /* tree.json */; };
+		85C67C1A16BCD8A2009CC38D /* MainStoryboard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 85C67C1816BCD8A2009CC38D /* MainStoryboard.storyboard */; };
 		D1C4921A6A5742ADAE4EB6F3 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 6B04A6AC7B2846268AF0689B /* libPods.a */; };
 /* End PBXBuildFile section */
 
@@ -55,14 +56,14 @@
 			containerPortal = 85C67A7E16BA183C009CC38D /* Project object */;
 			proxyType = 1;
 			remoteGlobalIDString = 85C67A8516BA183C009CC38D;
-			remoteInfo = AFGitHub;
+			remoteInfo = AFGitHubSamples;
 		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
 		35A32EE6687A42F2BEC3B5C9 /* Pods.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.xcconfig; path = Pods/Pods.xcconfig; sourceTree = SOURCE_ROOT; };
 		6B04A6AC7B2846268AF0689B /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
-		85C67A8616BA183C009CC38D /* AFGitHub.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AFGitHub.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		85C67A8616BA183C009CC38D /* AFGitHubSamples.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AFGitHubSamples.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		85C67A8916BA183C009CC38D /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		85C67A8B16BA183C009CC38D /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		85C67A8D16BA183C009CC38D /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -125,6 +126,7 @@
 		85C67BA016BBA434009CC38D /* repository.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = repository.json; sourceTree = "<group>"; };
 		85C67BA116BBA434009CC38D /* tag.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = tag.json; sourceTree = "<group>"; };
 		85C67BA216BBA434009CC38D /* tree.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = tree.json; sourceTree = "<group>"; };
+		85C67C1916BCD8A2009CC38D /* en */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = en; path = en.lproj/MainStoryboard.storyboard; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -156,7 +158,7 @@
 			isa = PBXGroup;
 			children = (
 				85C67AC416BA1DDB009CC38D /* AFGitHubClient */,
-				85C67A8F16BA183C009CC38D /* AFGitHub */,
+				85C67A8F16BA183C009CC38D /* AFGitHubSamples */,
 				85C67AB316BA183C009CC38D /* AFGitHubTests */,
 				85C67A8816BA183C009CC38D /* Frameworks */,
 				85C67A8716BA183C009CC38D /* Products */,
@@ -167,7 +169,7 @@
 		85C67A8716BA183C009CC38D /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				85C67A8616BA183C009CC38D /* AFGitHub.app */,
+				85C67A8616BA183C009CC38D /* AFGitHubSamples.app */,
 				85C67AAC16BA183C009CC38D /* AFGitHubTests.octest */,
 			);
 			name = Products;
@@ -185,7 +187,7 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
-		85C67A8F16BA183C009CC38D /* AFGitHub */ = {
+		85C67A8F16BA183C009CC38D /* AFGitHubSamples */ = {
 			isa = PBXGroup;
 			children = (
 				85C67A9016BA183C009CC38D /* Podfile */,
@@ -206,6 +208,7 @@
 				85C67AA116BA183C009CC38D /* Default.png */,
 				85C67AA316BA183C009CC38D /* Default@2x.png */,
 				85C67AA516BA183C009CC38D /* Default-568h@2x.png */,
+				85C67C1816BCD8A2009CC38D /* MainStoryboard.storyboard */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -322,9 +325,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		85C67A8516BA183C009CC38D /* AFGitHub */ = {
+		85C67A8516BA183C009CC38D /* AFGitHubSamples */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 85C67ABE16BA183C009CC38D /* Build configuration list for PBXNativeTarget "AFGitHub" */;
+			buildConfigurationList = 85C67ABE16BA183C009CC38D /* Build configuration list for PBXNativeTarget "AFGitHubSamples" */;
 			buildPhases = (
 				85C67A8216BA183C009CC38D /* Sources */,
 				85C67A8316BA183C009CC38D /* Frameworks */,
@@ -335,9 +338,9 @@
 			);
 			dependencies = (
 			);
-			name = AFGitHub;
-			productName = AFGitHub;
-			productReference = 85C67A8616BA183C009CC38D /* AFGitHub.app */;
+			name = AFGitHubSamples;
+			productName = AFGitHubSamples;
+			productReference = 85C67A8616BA183C009CC38D /* AFGitHubSamples.app */;
 			productType = "com.apple.product-type.application";
 		};
 		85C67AAB16BA183C009CC38D /* AFGitHubTests */ = {
@@ -381,7 +384,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				85C67A8516BA183C009CC38D /* AFGitHub */,
+				85C67A8516BA183C009CC38D /* AFGitHubSamples */,
 				85C67AAB16BA183C009CC38D /* AFGitHubTests */,
 			);
 		};
@@ -397,6 +400,7 @@
 				85C67AA216BA183C009CC38D /* Default.png in Resources */,
 				85C67AA416BA183C009CC38D /* Default@2x.png in Resources */,
 				85C67AA616BA183C009CC38D /* Default-568h@2x.png in Resources */,
+				85C67C1A16BCD8A2009CC38D /* MainStoryboard.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -487,7 +491,7 @@
 /* Begin PBXTargetDependency section */
 		85C67AB216BA183C009CC38D /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 85C67A8516BA183C009CC38D /* AFGitHub */;
+			target = 85C67A8516BA183C009CC38D /* AFGitHubSamples */;
 			targetProxy = 85C67AB116BA183C009CC38D /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
@@ -507,6 +511,14 @@
 				85C67AB716BA183C009CC38D /* en */,
 			);
 			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+		85C67C1816BCD8A2009CC38D /* MainStoryboard.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				85C67C1916BCD8A2009CC38D /* en */,
+			);
+			name = MainStoryboard.storyboard;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */
@@ -575,8 +587,8 @@
 			baseConfigurationReference = 35A32EE6687A42F2BEC3B5C9 /* Pods.xcconfig */;
 			buildSettings = {
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "AFGitHub/AFGitHub-Prefix.pch";
-				INFOPLIST_FILE = "AFGitHub/AFGitHub-Info.plist";
+				GCC_PREFIX_HEADER = "AFGitHubSamples/AFGitHub-Prefix.pch";
+				INFOPLIST_FILE = "$(SRCROOT)/AFGitHubSamples/AFGitHub-Info.plist";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
 			};
@@ -587,8 +599,8 @@
 			baseConfigurationReference = 35A32EE6687A42F2BEC3B5C9 /* Pods.xcconfig */;
 			buildSettings = {
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "AFGitHub/AFGitHub-Prefix.pch";
-				INFOPLIST_FILE = "AFGitHub/AFGitHub-Info.plist";
+				GCC_PREFIX_HEADER = "AFGitHubSamples/AFGitHub-Prefix.pch";
+				INFOPLIST_FILE = "$(SRCROOT)/AFGitHubSamples/AFGitHub-Info.plist";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
 			};
@@ -603,7 +615,7 @@
 					"\"$(DEVELOPER_LIBRARY_DIR)/Frameworks\"",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "AFGitHub/AFGitHub-Prefix.pch";
+				GCC_PREFIX_HEADER = "AFGitHubSamples/AFGitHub-Prefix.pch";
 				INFOPLIST_FILE = "AFGitHubTests/AFGitHubTests-Info.plist";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TEST_HOST = "$(BUNDLE_LOADER)";
@@ -620,7 +632,7 @@
 					"\"$(DEVELOPER_LIBRARY_DIR)/Frameworks\"",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "AFGitHub/AFGitHub-Prefix.pch";
+				GCC_PREFIX_HEADER = "AFGitHubSamples/AFGitHub-Prefix.pch";
 				INFOPLIST_FILE = "AFGitHubTests/AFGitHubTests-Info.plist";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TEST_HOST = "$(BUNDLE_LOADER)";
@@ -640,7 +652,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		85C67ABE16BA183C009CC38D /* Build configuration list for PBXNativeTarget "AFGitHub" */ = {
+		85C67ABE16BA183C009CC38D /* Build configuration list for PBXNativeTarget "AFGitHubSamples" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				85C67ABF16BA183C009CC38D /* Debug */,
