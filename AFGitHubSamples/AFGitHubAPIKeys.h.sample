@@ -1,0 +1,3 @@
+#define kAFGitHubClientID     @"<YOUR_CLIENT_ID_HERE>"
+#define kAFGitHubClientSecret @"<YOUR_CLIENT_SECRET_HERE>"
+#define kAFGitHubCallbackURL  @"<YOUR_CALLBACK_HERE>"

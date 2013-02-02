@@ -1,7 +1,8 @@
 //
-//  AFGitHubGlobal.m
+//  NSString+URLEncoding.m
 //
-//  Copyright (c) 2012 Atsushi Nagase (http://ngs.io/)
+//  Created by Jon Crosby on 10/19/07.
+//  Copyright 2007 Kaboomerang LLC. All rights reserved.
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -21,18 +22,29 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 //  THE SOFTWARE.
 
-#import "AFGitHubGlobal.h"
 
-//  From NINonEmptyCollectionTesting.m
+#import "NSString+URLEncoding.h"
 
-BOOL AFGitHubIsArrayWithObjects(id object) {
-  return [object isKindOfClass:[NSArray class]] && [(NSArray*)object count] > 0;
+
+@implementation NSString (OAURLEncodingAdditions)
+
+- (NSString *)URLEncodedString 
+{
+    NSString *result = (NSString *)CFBridgingRelease(CFURLCreateStringByAddingPercentEscapes(kCFAllocatorDefault,
+                                                                           (CFStringRef)self,
+                                                                           NULL,
+																		   CFSTR("!*'();:@&=+$,/?%#[]"),
+                                                                           kCFStringEncodingUTF8));
+	return result;
 }
 
-BOOL AFGitHubIsSetWithObjects(id object) {
-  return [object isKindOfClass:[NSSet class]] && [(NSSet*)object count] > 0;
+- (NSString*)URLDecodedString
+{
+	NSString *result = (NSString *)CFBridgingRelease(CFURLCreateStringByReplacingPercentEscapesUsingEncoding(kCFAllocatorDefault,
+																						   (CFStringRef)self,
+																						   CFSTR(""),
+																						   kCFStringEncodingUTF8));
+	return result;	
 }
 
-BOOL AFGitHubIsStringWithAnyText(id object) {
-  return [object isKindOfClass:[NSString class]] && [(NSString*)object length] > 0;
-}
+@end

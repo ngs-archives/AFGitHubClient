@@ -47,6 +47,11 @@
 		85C67BA716BBA434009CC38D /* tag.json in Resources */ = {isa = PBXBuildFile; fileRef = 85C67BA116BBA434009CC38D /* tag.json */; };
 		85C67BA816BBA434009CC38D /* tree.json in Resources */ = {isa = PBXBuildFile; fileRef = 85C67BA216BBA434009CC38D /* tree.json */; };
 		85C67C1A16BCD8A2009CC38D /* MainStoryboard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 85C67C1816BCD8A2009CC38D /* MainStoryboard.storyboard */; };
+		85C67C1E16BCDAA1009CC38D /* AFGitHubTopViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 85C67C1D16BCDAA1009CC38D /* AFGitHubTopViewController.m */; };
+		85C67C2116BCDF81009CC38D /* AFGitHubSampleRepoListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 85C67C2016BCDF81009CC38D /* AFGitHubSampleRepoListViewController.m */; };
+		85C67C2416BCE2EF009CC38D /* AFGitHubAuthViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 85C67C2316BCE2EF009CC38D /* AFGitHubAuthViewController.m */; };
+		85C67C2D16BCEA1D009CC38D /* NSString+queryComponents.m in Sources */ = {isa = PBXBuildFile; fileRef = 85C67C2C16BCEA1C009CC38D /* NSString+queryComponents.m */; };
+		85C67C3016BCFB5B009CC38D /* NSString+URLEncoding.m in Sources */ = {isa = PBXBuildFile; fileRef = 85C67C2F16BCFB5B009CC38D /* NSString+URLEncoding.m */; };
 		D1C4921A6A5742ADAE4EB6F3 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 6B04A6AC7B2846268AF0689B /* libPods.a */; };
 /* End PBXBuildFile section */
 
@@ -127,6 +132,19 @@
 		85C67BA116BBA434009CC38D /* tag.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = tag.json; sourceTree = "<group>"; };
 		85C67BA216BBA434009CC38D /* tree.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = tree.json; sourceTree = "<group>"; };
 		85C67C1916BCD8A2009CC38D /* en */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = en; path = en.lproj/MainStoryboard.storyboard; sourceTree = "<group>"; };
+		85C67C1C16BCDAA1009CC38D /* AFGitHubTopViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AFGitHubTopViewController.h; sourceTree = "<group>"; };
+		85C67C1D16BCDAA1009CC38D /* AFGitHubTopViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AFGitHubTopViewController.m; sourceTree = "<group>"; };
+		85C67C1F16BCDF81009CC38D /* AFGitHubSampleRepoListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AFGitHubSampleRepoListViewController.h; sourceTree = "<group>"; };
+		85C67C2016BCDF81009CC38D /* AFGitHubSampleRepoListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AFGitHubSampleRepoListViewController.m; sourceTree = "<group>"; };
+		85C67C2216BCE2EE009CC38D /* AFGitHubAuthViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AFGitHubAuthViewController.h; sourceTree = "<group>"; };
+		85C67C2316BCE2EF009CC38D /* AFGitHubAuthViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AFGitHubAuthViewController.m; sourceTree = "<group>"; };
+		85C67C2516BCE366009CC38D /* AFGitHubAPIKeys.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AFGitHubAPIKeys.h; sourceTree = "<group>"; };
+		85C67C2616BCE40E009CC38D /* AFGitHub.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AFGitHub.h; sourceTree = "<group>"; };
+		85C67C2716BCE6E8009CC38D /* AFGitHubConstants.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AFGitHubConstants.h; sourceTree = "<group>"; };
+		85C67C2B16BCEA1C009CC38D /* NSString+queryComponents.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+queryComponents.h"; sourceTree = "<group>"; };
+		85C67C2C16BCEA1C009CC38D /* NSString+queryComponents.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+queryComponents.m"; sourceTree = "<group>"; };
+		85C67C2E16BCFB5B009CC38D /* NSString+URLEncoding.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+URLEncoding.h"; sourceTree = "<group>"; };
+		85C67C2F16BCFB5B009CC38D /* NSString+URLEncoding.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+URLEncoding.m"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -190,6 +208,8 @@
 		85C67A8F16BA183C009CC38D /* AFGitHubSamples */ = {
 			isa = PBXGroup;
 			children = (
+				85C67C2516BCE366009CC38D /* AFGitHubAPIKeys.h */,
+				85C67C1B16BCDA7B009CC38D /* View Controllers */,
 				85C67A9016BA183C009CC38D /* Podfile */,
 				85C67A9E16BA183C009CC38D /* AFGitHubSampleAppDelegate.h */,
 				85C67A9F16BA183C009CC38D /* AFGitHubSampleAppDelegate.m */,
@@ -236,6 +256,8 @@
 		85C67AC416BA1DDB009CC38D /* AFGitHubClient */ = {
 			isa = PBXGroup;
 			children = (
+				85C67C2716BCE6E8009CC38D /* AFGitHubConstants.h */,
+				85C67C2616BCE40E009CC38D /* AFGitHub.h */,
 				85C67B8F16BB62D6009CC38D /* AFGitHubGlobal.h */,
 				85C67B9016BB62D6009CC38D /* AFGitHubGlobal.m */,
 				85C67ACF16BA23E3009CC38D /* Data */,
@@ -301,10 +323,14 @@
 		85C67B9516BB9DE0009CC38D /* Category */ = {
 			isa = PBXGroup;
 			children = (
+				85C67C2E16BCFB5B009CC38D /* NSString+URLEncoding.h */,
+				85C67C2F16BCFB5B009CC38D /* NSString+URLEncoding.m */,
 				85C67B9616BB9EC5009CC38D /* NSDate+InternetDateTime.h */,
 				85C67B9716BB9EC5009CC38D /* NSDate+InternetDateTime.m */,
 				85C67B9216BB9DD8009CC38D /* NSData+Base64.h */,
 				85C67B9316BB9DD9009CC38D /* NSData+Base64.m */,
+				85C67C2B16BCEA1C009CC38D /* NSString+queryComponents.h */,
+				85C67C2C16BCEA1C009CC38D /* NSString+queryComponents.m */,
 			);
 			name = Category;
 			sourceTree = "<group>";
@@ -320,6 +346,19 @@
 				85C67BA216BBA434009CC38D /* tree.json */,
 			);
 			path = fixtures;
+			sourceTree = "<group>";
+		};
+		85C67C1B16BCDA7B009CC38D /* View Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				85C67C1C16BCDAA1009CC38D /* AFGitHubTopViewController.h */,
+				85C67C1D16BCDAA1009CC38D /* AFGitHubTopViewController.m */,
+				85C67C1F16BCDF81009CC38D /* AFGitHubSampleRepoListViewController.h */,
+				85C67C2016BCDF81009CC38D /* AFGitHubSampleRepoListViewController.m */,
+				85C67C2216BCE2EE009CC38D /* AFGitHubAuthViewController.h */,
+				85C67C2316BCE2EF009CC38D /* AFGitHubAuthViewController.m */,
+			);
+			name = "View Controllers";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -475,6 +514,11 @@
 				85C67B9416BB9DDA009CC38D /* NSData+Base64.m in Sources */,
 				85C67B9816BB9EC5009CC38D /* NSDate+InternetDateTime.m in Sources */,
 				85C67B9B16BBA08D009CC38D /* AFGitHubGitDataObject.m in Sources */,
+				85C67C1E16BCDAA1009CC38D /* AFGitHubTopViewController.m in Sources */,
+				85C67C2116BCDF81009CC38D /* AFGitHubSampleRepoListViewController.m in Sources */,
+				85C67C2416BCE2EF009CC38D /* AFGitHubAuthViewController.m in Sources */,
+				85C67C2D16BCEA1D009CC38D /* NSString+queryComponents.m in Sources */,
+				85C67C3016BCFB5B009CC38D /* NSString+URLEncoding.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

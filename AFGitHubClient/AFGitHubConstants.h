@@ -1,5 +1,5 @@
 //
-//  AFGitHubGlobal.m
+//  AFGitHubConstants.h
 //
 //  Copyright (c) 2012 Atsushi Nagase (http://ngs.io/)
 //
@@ -21,18 +21,7 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 //  THE SOFTWARE.
 
-#import "AFGitHubGlobal.h"
+#import <Foundation/Foundation.h>
+@class AFGitHubAPIResponse;
 
-//  From NINonEmptyCollectionTesting.m
-
-BOOL AFGitHubIsArrayWithObjects(id object) {
-  return [object isKindOfClass:[NSArray class]] && [(NSArray*)object count] > 0;
-}
-
-BOOL AFGitHubIsSetWithObjects(id object) {
-  return [object isKindOfClass:[NSSet class]] && [(NSSet*)object count] > 0;
-}
-
-BOOL AFGitHubIsStringWithAnyText(id object) {
-  return [object isKindOfClass:[NSString class]] && [(NSString*)object length] > 0;
-}
+typedef void (^AFGitHubAPIResponseBlock)(AFGitHubAPIResponse *response);

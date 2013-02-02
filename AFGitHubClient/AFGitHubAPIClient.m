@@ -25,8 +25,18 @@
 #import "AFJSONRequestOperation.h"
 #import "AFGitHubAPIRequestOperation.h"
 #import "AFNetworkActivityIndicatorManager.h"
+#import "AFGitHubConstants.h"
+#import "AFGitHubAPIResponse.h"
+#import "NSString+queryComponents.h"
+#import "AFGitHubGlobal.h"
+#import "NSString+URLEncoding.h"
 
 static NSString * const kAFGitHubAPIBaseURLString = @"https://api.github.com";
+static NSString * const kAFGitHubAPINakedBaseURLString = @"https://github.com";
+
+static NSString * const kAFGitHubAPIAuthWindowPath = @"/login/oauth/authorize";
+static NSString * const kAFGitHubAPIAccessTokenPath = @"/login/oauth/access_token";
+
 static AFGitHubAPIClient *_sharedClient = nil;
 
 @implementation AFGitHubAPIClient
@@ -37,6 +47,10 @@ static AFGitHubAPIClient *_sharedClient = nil;
 
 + (void)setSharedClient:(AFGitHubAPIClient *)client {
   _sharedClient = client;
+}
+
++ (AFGitHubAPIClient *)clientWithClientID:(NSString *)clientID secret:(NSString *)secret {
+  return [[self alloc] initWithClientID:clientID secret:secret];
 }
 
 - (id)initWithClientID:(NSString *)clientID secret:(NSString *)secret {
@@ -67,6 +81,69 @@ static AFGitHubAPIClient *_sharedClient = nil;
   AFGitHubAPIRequestOperation *op = [[AFGitHubAPIRequestOperation alloc] initWithRequest:request];
   [op setCompletionBlockWithSuccess:success failure:failure];
   return op;
+}
+
+#pragma mark - Authentication
+
++ (BOOL)isAuthFormURL:(NSURL *)URL {
+  NSString *host = URL.host;
+  NSString *path = URL.path;
+  return
+  ([host hasSuffix:@"github.com"] &&
+   (
+    [path isEqualToString:@"/session"] ||
+    [path isEqualToString:@"/login/oauth/authorize"] ||
+    [path isEqualToString:@"/login"] ||
+    [path hasPrefix:@"/login/remote"])
+   );
+}
+
+
+- (BOOL)handleOpenURL:(NSURL *)URL withCallbackURLString:(NSString *)callbackURLString
+              success:(void (^)(AFOAuthCredential *credential))success
+              failure:(void (^)(NSError *error))failure {
+  if(![URL.absoluteString hasPrefix:callbackURLString])
+    return NO;
+  NSDictionary *query = [URL.query queryContentsUsingEncoding:NSUTF8StringEncoding];
+  NSString *code = AFGitHubIsArrayWithObjects([query valueForKey:@"code"]) ? [[query valueForKey:@"code"] objectAtIndex:0] : nil;
+  if(!AFGitHubIsStringWithAnyText(code)) {
+    dispatch_async(dispatch_get_main_queue(), ^{
+      failure([NSError errorWithDomain:AFGitHubErrorDomain code:403 userInfo:nil]);
+    });
+    return YES;
+  }
+  [self
+   authenticateUsingOAuthWithPath:kAFGitHubAPIAccessTokenPath
+   code:code redirectURI:callbackURLString
+   success:success failure:failure];
+  return YES;
+}
+
+- (BOOL)isAuthenticated {
+  return AFGitHubIsStringWithAnyText([self defaultValueForHeader:@"Authorization"]);
+}
+
+- (NSURL *)authURLWithCallbackURLString:(NSString *)callbackURLString
+                                  scope:(NSArray *)scope {
+  return [NSURL URLWithString:
+          [NSString stringWithFormat:
+           @"%@%@?client_id=%@&redirect_uri=%@&scope=%@",
+           kAFGitHubAPINakedBaseURLString, kAFGitHubAPIAuthWindowPath,
+           self.clientID, callbackURLString.URLEncodedString,
+           [scope componentsJoinedByString:@","].URLEncodedString]];
+}
+
+#pragma mark - AFNetworkClient
+
+- (NSMutableURLRequest *)requestWithMethod:(NSString *)method
+                                      path:(NSString *)path
+                                parameters:(NSDictionary *)parameters {
+  NSMutableURLRequest *request = [super requestWithMethod:method path:path parameters:parameters];
+  if(([path isEqualToString:kAFGitHubAPIAccessTokenPath] &&
+      [method.uppercaseString isEqualToString:@"POST"]))
+    [request setURL:[NSURL URLWithString:kAFGitHubAPIAccessTokenPath
+                           relativeToURL:[NSURL URLWithString:kAFGitHubAPINakedBaseURLString]]];
+  return request;
 }
 
 

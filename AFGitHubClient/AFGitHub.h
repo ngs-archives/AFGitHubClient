@@ -1,5 +1,5 @@
 //
-//  AFGitHubGlobal.m
+//  AFGitHub.h
 //
 //  Copyright (c) 2012 Atsushi Nagase (http://ngs.io/)
 //
@@ -21,18 +21,21 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 //  THE SOFTWARE.
 
+#import "AFGitHubConstants.h"
+#import "AFGitHubAPIClient.h"
+#import "AFGitHubAPIRequestOperation.h"
+#import "AFGitHubAPIResponse.h"
+#import "AFGitHubBlob.h"
+#import "AFGitHubComment.h"
+#import "AFGitHubCommit.h"
+#import "AFGitHubGitDataObject.h"
+#import "AFGitHubGitObject.h"
 #import "AFGitHubGlobal.h"
-
-//  From NINonEmptyCollectionTesting.m
-
-BOOL AFGitHubIsArrayWithObjects(id object) {
-  return [object isKindOfClass:[NSArray class]] && [(NSArray*)object count] > 0;
-}
-
-BOOL AFGitHubIsSetWithObjects(id object) {
-  return [object isKindOfClass:[NSSet class]] && [(NSSet*)object count] > 0;
-}
-
-BOOL AFGitHubIsStringWithAnyText(id object) {
-  return [object isKindOfClass:[NSString class]] && [(NSString*)object length] > 0;
-}
+#import "AFGitHubLinkHeader.h"
+#import "AFGitHubObject.h"
+#import "AFGitHubPullRequest.h"
+#import "AFGitHubReference.h"
+#import "AFGitHubRepository.h"
+#import "AFGitHubTag.h"
+#import "AFGitHubTree.h"
+#import "AFGitHubUser.h"

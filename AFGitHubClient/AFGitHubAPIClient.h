@@ -25,9 +25,20 @@
 
 @interface AFGitHubAPIClient : AFOAuth2Client
 
++ (AFGitHubAPIClient *)clientWithClientID:(NSString *)clientID secret:(NSString *)secret;
 - (id)initWithClientID:(NSString *)clientID secret:(NSString *)secret;
 
 + (AFGitHubAPIClient *)sharedClient;
 + (void)setSharedClient:(AFGitHubAPIClient *)client;
+
++ (BOOL)isAuthFormURL:(NSURL *)URL;
+- (BOOL)handleOpenURL:(NSURL *)URL withCallbackURLString:(NSString *)callbackURLString
+              success:(void (^)(AFOAuthCredential *credential))success
+              failure:(void (^)(NSError *error))failure;
+
+- (NSURL *)authURLWithCallbackURLString:(NSString *)callbackURLString
+                                  scope:(NSArray *)scope;
+
+- (BOOL)isAuthenticated;
 
 @end

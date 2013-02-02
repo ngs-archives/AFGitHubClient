@@ -23,6 +23,8 @@
 
 #import "AFJSONRequestOperation.h"
 
+extern NSString * const AFGitHubErrorDomain;
+
 @class AFGitHubAPIResponse;
 @interface AFGitHubAPIRequestOperation : AFJSONRequestOperation
 
