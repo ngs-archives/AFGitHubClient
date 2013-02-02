@@ -22,8 +22,26 @@
 //  THE SOFTWARE.
 
 #import "AFGitHubTree.h"
+#import "AFGitHubGlobal.h"
+#import "AFGitHubTree.h"
+#import "AFGitHubBlob.h"
 
 @implementation AFGitHubTree
+
+- (id)initWithDictionary:(NSDictionary *)dictonary {
+  if(self = [super initWithDictionary:dictonary]) {
+    id val = nil;
+    val = dictonary[@"tree"];
+    NSMutableArray *buf = @[].mutableCopy;
+    if(AFGitHubIsStringWithAnyText(val)) {
+      for (id obj in val) {
+        id obj2 = [AFGitHubGitObject gitObjectWithDictionary:val];
+        if(obj2) [buf addObject:obj2];
+      }
+    }
+  }
+  return self;
+}
 
 - (NSArray *)paths {
   NSMutableArray *buf = @[].mutableCopy;

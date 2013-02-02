@@ -22,7 +22,55 @@
 //  THE SOFTWARE.
 
 #import "AFGitHubReference.h"
+#import "AFGitHubGlobal.h"
+#import "AFGitHubComment.h"
+#import "AFGitHubTag.h"
 
 @implementation AFGitHubReference
+
+- (id)initWithDictionary:(NSDictionary *)dictionary {
+  if(self = [super initWithDictionary:dictionary]) {
+    id val = nil;
+    val = dictionary[@"ref"];
+    if(AFGitHubIsStringWithAnyText(val))
+      self.ref = val;
+    val = dictionary[@"object"];
+    if([val isKindOfClass:[NSDictionary class]]) {
+      NSString *type = val[@"type"];
+      if([type isEqualToString:@"tag"]) {
+        self.object = [[AFGitHubTag alloc] initWithDictionary:val];
+      } else if([type isEqualToString:@"commit"]) {
+        self.object = [[AFGitHubComment alloc] initWithDictionary:val];
+      }
+    }
+  }
+  return self;
+}
+
+
+#pragma mark - NSCopying
+
+- (id)copyWithZone:(NSZone *)zone {
+  AFGitHubReference *copy = [super copyWithZone:zone];
+  copy.ref = self.ref;
+  copy.object = self.object;
+  return copy;
+}
+
+#pragma mark - NSCoding
+
+- (id)initWithCoder:(NSCoder *)aDecoder {
+  if(self = [super initWithCoder:aDecoder]) {
+    self.ref = [aDecoder decodeObjectForKey:@"ref"];
+    self.object = [aDecoder decodeObjectForKey:@"object"];
+  }
+  return self;
+}
+
+- (void)encodeWithCoder:(NSCoder *)aCoder {
+  [super encodeWithCoder:aCoder];
+  [aCoder encodeObject:self.ref forKey:@"ref"];
+  [aCoder encodeObject:self.object forKey:@"object"];
+}
 
 @end

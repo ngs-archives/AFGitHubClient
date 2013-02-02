@@ -22,7 +22,46 @@
 //  THE SOFTWARE.
 
 #import "AFGitHubGitDataObject.h"
+#import "AFGitHubGlobal.h"
 
 @implementation AFGitHubGitDataObject
+
+- (id)initWithDictionary:(NSDictionary *)dictonary {
+  if(self = [super initWithDictionary:dictonary]) {
+    id val = nil;
+    val = dictonary[@"path"];
+    if(AFGitHubIsStringWithAnyText(val))
+      self.path = val;
+    val = dictonary[@"mode"];
+    if(AFGitHubIsStringWithAnyText(val))
+      self.mode = val;
+  }
+  return self;
+}
+
+#pragma mark - NSCopying
+
+- (id)copyWithZone:(NSZone *)zone {
+  AFGitHubGitDataObject *copy = [super copyWithZone:zone];
+  copy.path = self.path;
+  copy.mode = self.mode;
+  return copy;
+}
+
+#pragma mark - NSCoding
+
+- (id)initWithCoder:(NSCoder *)aDecoder {
+  if(self = [super initWithCoder:aDecoder]) {
+    self.path = [aDecoder decodeObjectForKey:@"path"];
+    self.mode = [aDecoder decodeObjectForKey:@"mode"];
+  }
+  return self;
+}
+
+- (void)encodeWithCoder:(NSCoder *)aCoder {
+  [super encodeWithCoder:aCoder];
+  [aCoder encodeObject:self.path forKey:@"path"];
+  [aCoder encodeObject:self.mode forKey:@"mode"];
+}
 
 @end

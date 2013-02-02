@@ -29,4 +29,6 @@
 @property (nonatomic, copy) NSString *SHA;
 @property (nonatomic, copy) NSURL *URL;
 
++ (AFGitHubGitObject *)gitObjectWithDictionary:(NSDictionary *)dictionary;
+
 @end

@@ -26,7 +26,7 @@
 @class AFGitHubUser;
 @interface AFGitHubTag : AFGitHubGitObject
 
-@property (nonatomic, strong) AFGitHubUser *tagger;
+@property (nonatomic, copy) AFGitHubUser *tagger;
 @property (nonatomic, copy) AFGitHubGitObject *object;
 @property (nonatomic, copy) NSString *message;
 @property (nonatomic, copy) NSString *tag;

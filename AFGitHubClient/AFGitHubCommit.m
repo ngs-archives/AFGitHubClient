@@ -22,8 +22,84 @@
 //  THE SOFTWARE.
 
 #import "AFGitHubCommit.h"
+#import "AFGitHubTree.h"
+#import "AFGitHubUser.h"
+#import "AFGitHubGlobal.h"
+#import "NSDate+InternetDateTime.h"
 
 @implementation AFGitHubCommit
 
+- (id)initWithDictionary:(NSDictionary *)dictionary {
+  if(self = [super initWithDictionary:dictionary]) {
+    id val = nil;
+    val = dictionary[@"tree"];
+    if([val isKindOfClass:[NSDictionary class]])
+      self.tree = [[AFGitHubTree alloc] initWithDictionary:val];
+    val = dictionary[@"parents"];
+    if(AFGitHubIsArrayWithObjects(val)) {
+      NSMutableArray *buf = @[].mutableCopy;
+      for (id obj in val) {
+        [buf addObject:[[AFGitHubCommit alloc] initWithDictionary:obj]];
+      }
+      self.parents = [buf copy];
+    }
+    val = dictionary[@"url"];
+    if(AFGitHubIsStringWithAnyText(val)) self.URL = [NSURL URLWithString:val];
+    val = dictionary[@"sha"];
+    if(AFGitHubIsStringWithAnyText(val)) self.SHA = val;
+    val = dictionary[@"message"];
+    if(AFGitHubIsStringWithAnyText(val)) self.message = val;
+    val = dictionary[@"author"];
+    if([val isKindOfClass:[NSDictionary class]]) {
+      self.author = [[AFGitHubUser alloc] initWithDictionary:val];
+      self.authedAt = [NSDate dateFromRFC3339String:val[@"date"]];
+    }
+    val = dictionary[@"committer"];
+    if([val isKindOfClass:[NSDictionary class]]) {
+      self.committer = [[AFGitHubUser alloc] initWithDictionary:val];
+      self.commitedAt = [NSDate dateFromRFC3339String:val[@"date"]];
+    }
+  }
+  return self;
+}
+
+
+#pragma mark - NSCopying
+
+- (id)copyWithZone:(NSZone *)zone {
+  AFGitHubCommit *copy = [super copyWithZone:zone];
+  copy.tree = self.tree;
+  copy.parents = self.parents;
+  copy.message = self.message;
+  copy.author = self.author;
+  copy.committer = self.committer;
+  copy.commitedAt = self.commitedAt;
+  return copy;
+}
+
+#pragma mark - NSCoding
+
+- (id)initWithCoder:(NSCoder *)aDecoder {
+  if(self = [self init]) {
+    self.tree = [aDecoder decodeObjectForKey:@"tree"];
+    self.parents = [aDecoder decodeObjectForKey:@"parents"];
+    self.URL = [aDecoder decodeObjectForKey:@"url"];
+    self.SHA = [aDecoder decodeObjectForKey:@"sha"];
+    self.message = [aDecoder decodeObjectForKey:@"message"];
+    self.author = [aDecoder decodeObjectForKey:@"author"];
+    self.committer = [aDecoder decodeObjectForKey:@"committer"];
+  }
+  return self;
+}
+
+- (void)encodeWithCoder:(NSCoder *)aCoder {
+  [aCoder encodeObject:self.tree forKey:@"tree"];
+  [aCoder encodeObject:self.parents forKey:@"parents"];
+  [aCoder encodeObject:self.URL forKey:@"url"];
+  [aCoder encodeObject:self.SHA forKey:@"sha"];
+  [aCoder encodeObject:self.message forKey:@"message"];
+  [aCoder encodeObject:self.author forKey:@"author"];
+  [aCoder encodeObject:self.committer forKey:@"committer"];
+}
 
 @end

@@ -22,8 +22,28 @@
 //  THE SOFTWARE.
 
 #import "AFGitHubGitObject.h"
+#import "AFGitHubGlobal.h"
+#import "AFGitHubCommit.h"
+#import "AFGitHubTag.h"
+#import "AFGitHubBlob.h"
+#import "AFGitHubTree.h"
 
 @implementation AFGitHubGitObject
+
++ (AFGitHubGitObject *)gitObjectWithDictionary:(NSDictionary *)dictionary {
+  if(![dictionary isKindOfClass:[NSDictionary class]])
+    return nil;
+  NSString *type = dictionary[@"type"];
+  if([type isEqualToString:@"tag"])
+    return [[AFGitHubTag alloc] initWithDictionary:dictionary];
+  if([type isEqualToString:@"commit"])
+    return [[AFGitHubCommit alloc] initWithDictionary:dictionary];
+  if([type isEqualToString:@"blob"])
+    return [[AFGitHubBlob alloc] initWithDictionary:dictionary];
+  if([type isEqualToString:@"tree"])
+    return [[AFGitHubTree alloc] initWithDictionary:dictionary];
+  return nil;
+}
 
 - (id)initWithDictionary:(NSDictionary *)dictonary {
   if(self = [super init]) {

@@ -23,10 +23,10 @@
 
 #import "AFGitHubGitObject.h"
 
-@class AFGitHubCommit, AFGitHubTree, AFGitHubUser;
+@class AFGitHubTree, AFGitHubUser;
 @interface AFGitHubCommit : AFGitHubGitObject
 
-@property (nonatomic, copy) AFGitHubCommit *parent;
+@property (nonatomic, copy) NSArray *parents;
 @property (nonatomic, copy) AFGitHubTree *tree;
 @property (nonatomic, copy) AFGitHubUser *author;
 @property (nonatomic, copy) AFGitHubUser *committer;
