@@ -67,8 +67,7 @@
   if(AFGitHubIsStringWithAnyText(self.SHA))
     dict[@"sha"] = self.SHA;
   else if(AFGitHubIsStringWithAnyText(self.content)) {
-    dict[@"content"] = self.base64Content;
-    dict[@"encoding"] = @"base64";
+    dict[@"content"] = self.content;
   }
   return dict.copy;
 }
