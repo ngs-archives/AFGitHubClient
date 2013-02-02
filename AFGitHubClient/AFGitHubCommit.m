@@ -63,6 +63,37 @@
   return self;
 }
 
+- (NSDictionary *)asJSON {
+  NSMutableDictionary *dict = @{}.mutableCopy;
+  if(AFGitHubIsStringWithAnyText(self.message))
+    dict[@"message"] = self.message;
+  if(self.tree && AFGitHubIsStringWithAnyText(self.tree.SHA))
+    dict[@"tree"] = self.tree.SHA;
+  NSMutableArray *buf = @[].mutableCopy;
+  for (AFGitHubCommit *c in self.parents) {
+    [buf addObject:c.SHA];
+  }
+  dict[@"parents"] = buf.copy;
+  if(self.committer && self.commitedAt) {
+    NSMutableDictionary *commiter = @{}.mutableCopy;
+    if(AFGitHubIsStringWithAnyText(self.committer.name))
+      commiter[@"name"] = self.committer.name;
+    if(AFGitHubIsStringWithAnyText(self.committer.email))
+      commiter[@"email"] = self.committer.email;
+    commiter[@"date"] = [self.commitedAt rfc3339String];
+    dict[@"commiter"] = dict.copy;
+  } else if(self.author) {
+    NSMutableDictionary *author = @{}.mutableCopy;
+    if(AFGitHubIsStringWithAnyText(self.author.name))
+      author[@"name"] = self.author.name;
+    if(AFGitHubIsStringWithAnyText(self.author.email))
+      author[@"email"] = self.author.email;
+    author[@"date"] = [self.authedAt rfc3339String];
+    dict[@"author"] = dict.copy;
+  }
+  return dict.copy;
+}
+
 
 #pragma mark - NSCopying
 
