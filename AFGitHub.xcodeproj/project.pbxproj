@@ -193,7 +193,7 @@
 				85C67A9F16BA183C009CC38D /* AFGitHubSampleAppDelegate.m */,
 				85C67A9216BA183C009CC38D /* Supporting Files */,
 			);
-			path = AFGitHub;
+			path = AFGitHubSamples;
 			sourceTree = "<group>";
 		};
 		85C67A9216BA183C009CC38D /* Supporting Files */ = {
