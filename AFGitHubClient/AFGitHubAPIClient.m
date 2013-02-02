@@ -33,6 +33,7 @@
 #import "AFGitHubGlobal.h"
 #import "AFGitHubLinkHeader.h"
 #import "AFGitHubObject.h"
+#import "AFGitHubOrganization.h"
 #import "AFGitHubPullRequest.h"
 #import "AFGitHubReference.h"
 #import "AFGitHubRepository.h"
@@ -74,6 +75,7 @@ static AFGitHubAPIClient *_sharedClient = nil;
   if (self = [super initWithBaseURL:url clientID:clientID secret:secret]) {
     [self registerHTTPOperationClass:[AFGitHubAPIRequestOperation class]];
     [self setDefaultHeader:@"Accept" value:@"application/vnd.github.full+json"];
+    [self setParameterEncoding:AFJSONParameterEncoding];
   }
   return self;
 }
@@ -112,7 +114,7 @@ static AFGitHubAPIClient *_sharedClient = nil;
 
 - (AFGitHubAPIRequestOperation *)HTTPRequestOperationWithRequest:(NSURLRequest *)urlRequest
                                                        itemClass:(Class)itemClass
-                                                         success:(void (^)(AFGitHubAPIRequestOperation *operation, id responseObject))success
+                                                         success:(void (^)(AFGitHubAPIRequestOperation *operation, AFGitHubAPIResponse *responseObject))success
                                                          failure:(void (^)(AFGitHubAPIRequestOperation *operation, NSError *error))failure {
   AFGitHubAPIRequestOperation *op = (AFGitHubAPIRequestOperation *)
   [self HTTPRequestOperationWithRequest:urlRequest
@@ -132,13 +134,13 @@ static AFGitHubAPIClient *_sharedClient = nil;
 - (void)getPath:(NSString *)path
      parameters:(NSDictionary *)parameters
       itemClass:(Class)itemClass
-        success:(void (^)(AFGitHubAPIRequestOperation *operation, id responseObject))success
+        success:(void (^)(AFGitHubAPIRequestOperation *operation, AFGitHubAPIResponse *responseObject))success
         failure:(void (^)(AFGitHubAPIRequestOperation *operation, NSError *error))failure {
 	NSURLRequest *request = [self requestWithMethod:@"GET" path:path parameters:parameters];
   AFGitHubAPIRequestOperation *operation =
   [self
    HTTPRequestOperationWithRequest:request itemClass:itemClass
-   success:^(AFGitHubAPIRequestOperation *operation, id responseObject) {
+   success:^(AFGitHubAPIRequestOperation *operation, AFGitHubAPIResponse *responseObject) {
      AFGitHubAPIRequestOperation *op = (AFGitHubAPIRequestOperation *)operation;
      success(op, op.ghResponse);
    }
@@ -149,13 +151,13 @@ static AFGitHubAPIClient *_sharedClient = nil;
 - (void)postPath:(NSString *)path
       parameters:(NSDictionary *)parameters
        itemClass:(Class)itemClass
-         success:(void (^)(AFGitHubAPIRequestOperation *operation, id responseObject))success
+         success:(void (^)(AFGitHubAPIRequestOperation *operation, AFGitHubAPIResponse *responseObject))success
          failure:(void (^)(AFGitHubAPIRequestOperation *operation, NSError *error))failure {
 	NSURLRequest *request = [self requestWithMethod:@"POST" path:path parameters:parameters];
   AFGitHubAPIRequestOperation *operation =
   [self
    HTTPRequestOperationWithRequest:request itemClass:itemClass
-   success:^(AFGitHubAPIRequestOperation *operation, id responseObject) {
+   success:^(AFGitHubAPIRequestOperation *operation, AFGitHubAPIResponse *responseObject) {
      AFGitHubAPIRequestOperation *op = (AFGitHubAPIRequestOperation *)operation;
      success(op, op.ghResponse);
    }
@@ -166,13 +168,13 @@ static AFGitHubAPIClient *_sharedClient = nil;
 - (void)putPath:(NSString *)path
      parameters:(NSDictionary *)parameters
       itemClass:(Class)itemClass
-        success:(void (^)(AFGitHubAPIRequestOperation *operation, id responseObject))success
+        success:(void (^)(AFGitHubAPIRequestOperation *operation, AFGitHubAPIResponse *responseObject))success
         failure:(void (^)(AFGitHubAPIRequestOperation *operation, NSError *error))failure {
 	NSURLRequest *request = [self requestWithMethod:@"PUT" path:path parameters:parameters];
   AFGitHubAPIRequestOperation *operation =
   [self
    HTTPRequestOperationWithRequest:request itemClass:itemClass
-   success:^(AFGitHubAPIRequestOperation *operation, id responseObject) {
+   success:^(AFGitHubAPIRequestOperation *operation, AFGitHubAPIResponse *responseObject) {
      AFGitHubAPIRequestOperation *op = (AFGitHubAPIRequestOperation *)operation;
      success(op, op.ghResponse);
    }
@@ -183,13 +185,13 @@ static AFGitHubAPIClient *_sharedClient = nil;
 - (void)deletePath:(NSString *)path
         parameters:(NSDictionary *)parameters
          itemClass:(Class)itemClass
-           success:(void (^)(AFGitHubAPIRequestOperation *operation, id responseObject))success
+           success:(void (^)(AFGitHubAPIRequestOperation *operation, AFGitHubAPIResponse *responseObject))success
            failure:(void (^)(AFGitHubAPIRequestOperation *operation, NSError *error))failure {
 	NSURLRequest *request = [self requestWithMethod:@"DELETE" path:path parameters:parameters];
   AFGitHubAPIRequestOperation *operation =
   [self
    HTTPRequestOperationWithRequest:request itemClass:itemClass
-   success:^(AFGitHubAPIRequestOperation *operation, id responseObject) {
+   success:^(AFGitHubAPIRequestOperation *operation, AFGitHubAPIResponse *responseObject) {
      AFGitHubAPIRequestOperation *op = (AFGitHubAPIRequestOperation *)operation;
      success(op, op.ghResponse);
    }
@@ -200,18 +202,34 @@ static AFGitHubAPIClient *_sharedClient = nil;
 - (void)patchPath:(NSString *)path
        parameters:(NSDictionary *)parameters
         itemClass:(Class)itemClass
-          success:(void (^)(AFGitHubAPIRequestOperation *operation, id responseObject))success
+          success:(void (^)(AFGitHubAPIRequestOperation *operation, AFGitHubAPIResponse *responseObject))success
           failure:(void (^)(AFGitHubAPIRequestOperation *operation, NSError *error))failure {
   NSURLRequest *request = [self requestWithMethod:@"PATCH" path:path parameters:parameters];
   AFGitHubAPIRequestOperation *operation =
   [self
    HTTPRequestOperationWithRequest:request itemClass:itemClass
-   success:^(AFGitHubAPIRequestOperation *operation, id responseObject) {
+   success:^(AFGitHubAPIRequestOperation *operation, AFGitHubAPIResponse *responseObject) {
      AFGitHubAPIRequestOperation *op = (AFGitHubAPIRequestOperation *)operation;
      success(op, op.ghResponse);
    }
    failure:failure];
   [self enqueueHTTPRequestOperation:operation];
+}
+
+#pragma mark - Pagination
+
+- (void)loadNextURL:(NSURL *)URL withHTTPMethod:(NSString *)method
+          itemClass:(Class)itemClass
+            success:(void (^)(AFGitHubAPIRequestOperation *operation, AFGitHubAPIResponse *responseObject))success
+            failure:(void (^)(AFGitHubAPIRequestOperation *operation, NSError *error))failure {
+  NSMutableURLRequest *mreq = [self requestWithMethod:method path:nil parameters:nil];
+  [mreq setURL:URL];
+  AFGitHubAPIRequestOperation *op =
+  [self
+   HTTPRequestOperationWithRequest:mreq
+   itemClass:[AFGitHubRepository class]
+   success:success failure:failure];
+  [self enqueueHTTPRequestOperation:op];
 }
 
 
@@ -273,11 +291,11 @@ static AFGitHubAPIClient *_sharedClient = nil;
 
 #pragma mark - Repos API
 
-- (void)getRepositoriesWithUsername:(NSString *)username
+- (void)getRepositoriesWithUser:(NSString *)login
                          parameters:(NSDictionary *)parameters
-                            success:(void (^)(AFGitHubAPIRequestOperation *operation, id responseObject))success
+                            success:(void (^)(AFGitHubAPIRequestOperation *operation, AFGitHubAPIResponse *responseObject))success
                             failure:(void (^)(AFGitHubAPIRequestOperation *operation, NSError *error))failure {
-  [self getPath:[NSString stringWithFormat:@"/users/%@/repos", username]
+  [self getPath:[NSString stringWithFormat:@"/users/%@/repos", login]
      parameters:parameters
       itemClass:[AFGitHubRepository class]
         success:success failure:failure];
@@ -285,7 +303,7 @@ static AFGitHubAPIClient *_sharedClient = nil;
 
 - (void)getRepositoriesWithOrganization:(NSString *)organizationName
                              parameters:(NSDictionary *)parameters
-                                success:(void (^)(AFGitHubAPIRequestOperation *operation, id responseObject))success
+                                success:(void (^)(AFGitHubAPIRequestOperation *operation, AFGitHubAPIResponse *responseObject))success
                                 failure:(void (^)(AFGitHubAPIRequestOperation *operation, NSError *error))failure {
   [self getPath:[NSString stringWithFormat:@"/orgs/%@/repos", organizationName]
      parameters:parameters
@@ -294,7 +312,7 @@ static AFGitHubAPIClient *_sharedClient = nil;
 }
 
 - (void)getMyRepositoriesWithParameters:(NSDictionary *)parameters
-                                success:(void (^)(AFGitHubAPIRequestOperation *operation, id responseObject))success
+                                success:(void (^)(AFGitHubAPIRequestOperation *operation, AFGitHubAPIResponse *responseObject))success
                                 failure:(void (^)(AFGitHubAPIRequestOperation *operation, NSError *error))failure {
   [self getPath:@"/user/repos"
      parameters:parameters
@@ -303,12 +321,120 @@ static AFGitHubAPIClient *_sharedClient = nil;
 }
 
 - (void)getAllRepositoriesWithParameters:(NSDictionary *)parameters
-                                 success:(void (^)(AFGitHubAPIRequestOperation *operation, id responseObject))success
+                                 success:(void (^)(AFGitHubAPIRequestOperation *operation, AFGitHubAPIResponse *responseObject))success
                                  failure:(void (^)(AFGitHubAPIRequestOperation *operation, NSError *error))failure {
   [self getPath:@"/repositories"
      parameters:parameters
       itemClass:[AFGitHubRepository class]
         success:success failure:failure];
 }
+
+- (void)createRepository:(AFGitHubRepository *)repository
+              withTeamId:(NSInteger)teamId
+                autoInit:(BOOL)autoInit
+       gitIgnoreTemplate:(NSString *)gitIgnoreTemplate
+                 success:(void (^)(AFGitHubAPIRequestOperation *operation, AFGitHubAPIResponse *responseObject))success
+                 failure:(void (^)(AFGitHubAPIRequestOperation *operation, NSError *error))failure {
+  [self createRepository:repository withOrganization:nil
+                  teamId:teamId autoInit:autoInit
+       gitIgnoreTemplate:gitIgnoreTemplate
+                 success:success failure:failure];
+}
+
+- (void)createRepository:(AFGitHubRepository *)repository
+        withOrganization:(NSString *)organizationName
+                  teamId:(NSInteger)teamId
+                autoInit:(BOOL)autoInit
+       gitIgnoreTemplate:(NSString *)gitIgnoreTemplate
+                 success:(void (^)(AFGitHubAPIRequestOperation *operation, AFGitHubAPIResponse *responseObject))success
+                 failure:(void (^)(AFGitHubAPIRequestOperation *operation, NSError *error))failure {
+  NSMutableDictionary *params = [repository asJSON].mutableCopy;
+  params[@"auto_init"] = [NSNumber numberWithBool:autoInit];
+  if(autoInit && AFGitHubIsStringWithAnyText(gitIgnoreTemplate))
+    params[@"gitIgnore_template"] = gitIgnoreTemplate;
+  if(teamId > 0)
+    params[@"team_id"] = [NSNumber numberWithInteger:teamId];
+  NSString *path = AFGitHubIsStringWithAnyText(organizationName) ? [NSString stringWithFormat:@"/orgs/%@/repos", organizationName] : @"/user/repos";
+  [self postPath:path
+      parameters:params
+       itemClass:[AFGitHubRepository class]
+         success:success failure:failure];
+}
+
+#pragma mark - Users API
+
+- (void)getUser:(NSString *)login
+        success:(void (^)(AFGitHubAPIRequestOperation *operation, AFGitHubAPIResponse *responseObject))success
+        failure:(void (^)(AFGitHubAPIRequestOperation *operation, NSError *error))failure {
+  [self getPath:[NSString stringWithFormat:@"/users/%@", login]
+     parameters:@{}
+      itemClass:[AFGitHubUser class]
+        success:success failure:failure];
+}
+
+- (void)getUserWithSuccess:(void (^)(AFGitHubAPIRequestOperation *operation, AFGitHubAPIResponse *responseObject))success
+                   failure:(void (^)(AFGitHubAPIRequestOperation *operation, NSError *error))failure {
+  [self getPath:@"/user"
+     parameters:@{}
+      itemClass:[AFGitHubUser class]
+        success:success failure:failure];
+}
+
+- (void)updateUser:(AFGitHubUser *)user
+           success:(void (^)(AFGitHubAPIRequestOperation *operation, AFGitHubAPIResponse *responseObject))success
+           failure:(void (^)(AFGitHubAPIRequestOperation *operation, NSError *error))failure {
+  [self patchPath:@"/user"
+     parameters:[user asJSON]
+      itemClass:[AFGitHubUser class]
+        success:success failure:failure];
+}
+
+- (void)getAllUsersWithSuccess:(void (^)(AFGitHubAPIRequestOperation *operation, AFGitHubAPIResponse *responseObject))success
+                       failure:(void (^)(AFGitHubAPIRequestOperation *operation, NSError *error))failure {
+  [self getPath:@"/users"
+     parameters:@{}
+      itemClass:[AFGitHubUser class]
+        success:success failure:failure];
+}
+
+#pragma mark - Orgs API
+
+- (void)getOrganizationsWithUser:(NSString *)login
+                         success:(void (^)(AFGitHubAPIRequestOperation *operation, AFGitHubAPIResponse *responseObject))success
+                         failure:(void (^)(AFGitHubAPIRequestOperation *operation, NSError *error))failure {
+  [self getPath:[NSString stringWithFormat:@"/users/%@/orgs", login]
+     parameters:@{}
+      itemClass:[AFGitHubOrganization class]
+        success:success failure:failure];
+}
+
+- (void)getOrganization:(NSString *)login
+                success:(void (^)(AFGitHubAPIRequestOperation *operation, AFGitHubAPIResponse *responseObject))success
+                failure:(void (^)(AFGitHubAPIRequestOperation *operation, NSError *error))failure {
+  [self getPath:[NSString stringWithFormat:@"/orgs/%@", login]
+     parameters:@{}
+      itemClass:[AFGitHubOrganization class]
+        success:success failure:failure];
+}
+
+
+- (void)getUserOrganizationWithSuccess:(void (^)(AFGitHubAPIRequestOperation *operation, AFGitHubAPIResponse *responseObject))success
+                               failure:(void (^)(AFGitHubAPIRequestOperation *operation, NSError *error))failure {
+  [self getPath:@"/user/orgs"
+     parameters:@{}
+      itemClass:[AFGitHubOrganization class]
+        success:success failure:failure];
+}
+
+- (void)updateOrganization:(AFGitHubOrganization *)organization
+                   success:(void (^)(AFGitHubAPIRequestOperation *operation, AFGitHubAPIResponse *responseObject))success
+                   failure:(void (^)(AFGitHubAPIRequestOperation *operation, NSError *error))failure {
+  [self patchPath:[NSString stringWithFormat:@"/orgs/%@", organization.login]
+       parameters:[organization asJSON]
+        itemClass:[AFGitHubOrganization class]
+          success:success failure:failure];
+}
+
+
 
 @end

@@ -26,6 +26,8 @@
 
 @interface AFGitHubUser : NSObject<AFGitHubObject>
 
+- (NSString *)displayName;
+
 @property (nonatomic, assign) BOOL isHireable;
 @property (nonatomic, assign) NSInteger followers;
 @property (nonatomic, assign) NSInteger following;

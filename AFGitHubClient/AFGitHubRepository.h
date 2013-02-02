@@ -94,5 +94,6 @@
 @property (nonatomic, readonly) BOOL pushPermission;
 @property (nonatomic, readonly) BOOL pullPermission;
 @property (nonatomic, readonly) BOOL adminPermission;
+@property (nonatomic, readonly) BOOL isGitHubPages;
 
 @end

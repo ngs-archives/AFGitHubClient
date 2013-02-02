@@ -27,6 +27,9 @@
 
 @implementation AFGitHubUser
 
+- (NSString *)displayName {
+  return AFGitHubIsStringWithAnyText(self.name) ? self.name : self.login;
+}
 
 #pragma mark - Initializing
 
@@ -93,6 +96,24 @@
     if(AFGitHubIsStringWithAnyText(val)) self.login = val;
   }
   return self;
+}
+
+- (NSDictionary *)asJSON {
+  NSMutableDictionary *buf = @{}.mutableCopy;
+  if(AFGitHubIsStringWithAnyText(self.name))
+    buf[@"name"] = self.name;
+  if(AFGitHubIsStringWithAnyText(self.email))
+    buf[@"email"] = self.email;
+  if(AFGitHubIsStringWithAnyText(self.blog))
+    buf[@"blog"] = self.blog;
+  if(AFGitHubIsStringWithAnyText(self.company))
+    buf[@"company"] = self.company;
+  if(AFGitHubIsStringWithAnyText(self.location))
+    buf[@"location"] = self.location;
+  if(AFGitHubIsStringWithAnyText(self.bio))
+    buf[@"bio"] = self.bio;
+  buf[@"hireable"] = @(self.isHireable);
+  return buf.copy;
 }
 
 #pragma mark - NSCopying

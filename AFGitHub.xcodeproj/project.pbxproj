@@ -48,10 +48,14 @@
 		85C67BA816BBA434009CC38D /* tree.json in Resources */ = {isa = PBXBuildFile; fileRef = 85C67BA216BBA434009CC38D /* tree.json */; };
 		85C67C1A16BCD8A2009CC38D /* MainStoryboard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 85C67C1816BCD8A2009CC38D /* MainStoryboard.storyboard */; };
 		85C67C1E16BCDAA1009CC38D /* AFGitHubTopViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 85C67C1D16BCDAA1009CC38D /* AFGitHubTopViewController.m */; };
-		85C67C2116BCDF81009CC38D /* AFGitHubSampleRepoListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 85C67C2016BCDF81009CC38D /* AFGitHubSampleRepoListViewController.m */; };
+		85C67C2116BCDF81009CC38D /* AFGitHubRepositoryListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 85C67C2016BCDF81009CC38D /* AFGitHubRepositoryListViewController.m */; };
 		85C67C2416BCE2EF009CC38D /* AFGitHubAuthViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 85C67C2316BCE2EF009CC38D /* AFGitHubAuthViewController.m */; };
 		85C67C2D16BCEA1D009CC38D /* NSString+queryComponents.m in Sources */ = {isa = PBXBuildFile; fileRef = 85C67C2C16BCEA1C009CC38D /* NSString+queryComponents.m */; };
 		85C67C3016BCFB5B009CC38D /* NSString+URLEncoding.m in Sources */ = {isa = PBXBuildFile; fileRef = 85C67C2F16BCFB5B009CC38D /* NSString+URLEncoding.m */; };
+		85C67C3416BD233F009CC38D /* AFGitHubOwnerSelectViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 85C67C3316BD233D009CC38D /* AFGitHubOwnerSelectViewController.m */; };
+		85C67C3716BD2429009CC38D /* AFGitHubCreateRepositoryViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 85C67C3616BD2428009CC38D /* AFGitHubCreateRepositoryViewController.m */; };
+		85C67C3A16BD25AE009CC38D /* AFGitHubOrganization.m in Sources */ = {isa = PBXBuildFile; fileRef = 85C67C3916BD25AE009CC38D /* AFGitHubOrganization.m */; };
+		85C67C3D16BD2FDF009CC38D /* AFGitHubAPIError.m in Sources */ = {isa = PBXBuildFile; fileRef = 85C67C3C16BD2FDF009CC38D /* AFGitHubAPIError.m */; };
 		D1C4921A6A5742ADAE4EB6F3 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 6B04A6AC7B2846268AF0689B /* libPods.a */; };
 /* End PBXBuildFile section */
 
@@ -134,8 +138,8 @@
 		85C67C1916BCD8A2009CC38D /* en */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = en; path = en.lproj/MainStoryboard.storyboard; sourceTree = "<group>"; };
 		85C67C1C16BCDAA1009CC38D /* AFGitHubTopViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AFGitHubTopViewController.h; sourceTree = "<group>"; };
 		85C67C1D16BCDAA1009CC38D /* AFGitHubTopViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AFGitHubTopViewController.m; sourceTree = "<group>"; };
-		85C67C1F16BCDF81009CC38D /* AFGitHubSampleRepoListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AFGitHubSampleRepoListViewController.h; sourceTree = "<group>"; };
-		85C67C2016BCDF81009CC38D /* AFGitHubSampleRepoListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AFGitHubSampleRepoListViewController.m; sourceTree = "<group>"; };
+		85C67C1F16BCDF81009CC38D /* AFGitHubRepositoryListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AFGitHubRepositoryListViewController.h; sourceTree = "<group>"; };
+		85C67C2016BCDF81009CC38D /* AFGitHubRepositoryListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AFGitHubRepositoryListViewController.m; sourceTree = "<group>"; };
 		85C67C2216BCE2EE009CC38D /* AFGitHubAuthViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AFGitHubAuthViewController.h; sourceTree = "<group>"; };
 		85C67C2316BCE2EF009CC38D /* AFGitHubAuthViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AFGitHubAuthViewController.m; sourceTree = "<group>"; };
 		85C67C2516BCE366009CC38D /* AFGitHubAPIKeys.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AFGitHubAPIKeys.h; sourceTree = "<group>"; };
@@ -146,6 +150,14 @@
 		85C67C2E16BCFB5B009CC38D /* NSString+URLEncoding.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+URLEncoding.h"; sourceTree = "<group>"; };
 		85C67C2F16BCFB5B009CC38D /* NSString+URLEncoding.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+URLEncoding.m"; sourceTree = "<group>"; };
 		85C67C3116BD0114009CC38D /* AFGitHubSampleConstants.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AFGitHubSampleConstants.h; sourceTree = "<group>"; };
+		85C67C3216BD233D009CC38D /* AFGitHubOwnerSelectViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AFGitHubOwnerSelectViewController.h; sourceTree = "<group>"; };
+		85C67C3316BD233D009CC38D /* AFGitHubOwnerSelectViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AFGitHubOwnerSelectViewController.m; sourceTree = "<group>"; };
+		85C67C3516BD2427009CC38D /* AFGitHubCreateRepositoryViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AFGitHubCreateRepositoryViewController.h; sourceTree = "<group>"; };
+		85C67C3616BD2428009CC38D /* AFGitHubCreateRepositoryViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AFGitHubCreateRepositoryViewController.m; sourceTree = "<group>"; };
+		85C67C3816BD25AE009CC38D /* AFGitHubOrganization.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AFGitHubOrganization.h; sourceTree = "<group>"; };
+		85C67C3916BD25AE009CC38D /* AFGitHubOrganization.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AFGitHubOrganization.m; sourceTree = "<group>"; };
+		85C67C3B16BD2FDE009CC38D /* AFGitHubAPIError.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AFGitHubAPIError.h; sourceTree = "<group>"; };
+		85C67C3C16BD2FDF009CC38D /* AFGitHubAPIError.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AFGitHubAPIError.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -297,6 +309,10 @@
 				85C67B8616BB4B12009CC38D /* AFGitHubUser.m */,
 				85C67B8C16BB4D5C009CC38D /* AFGitHubComment.h */,
 				85C67B8D16BB4D5D009CC38D /* AFGitHubComment.m */,
+				85C67C3816BD25AE009CC38D /* AFGitHubOrganization.h */,
+				85C67C3916BD25AE009CC38D /* AFGitHubOrganization.m */,
+				85C67C3B16BD2FDE009CC38D /* AFGitHubAPIError.h */,
+				85C67C3C16BD2FDF009CC38D /* AFGitHubAPIError.m */,
 			);
 			name = Data;
 			sourceTree = "<group>";
@@ -355,10 +371,14 @@
 			children = (
 				85C67C1C16BCDAA1009CC38D /* AFGitHubTopViewController.h */,
 				85C67C1D16BCDAA1009CC38D /* AFGitHubTopViewController.m */,
-				85C67C1F16BCDF81009CC38D /* AFGitHubSampleRepoListViewController.h */,
-				85C67C2016BCDF81009CC38D /* AFGitHubSampleRepoListViewController.m */,
+				85C67C1F16BCDF81009CC38D /* AFGitHubRepositoryListViewController.h */,
+				85C67C2016BCDF81009CC38D /* AFGitHubRepositoryListViewController.m */,
 				85C67C2216BCE2EE009CC38D /* AFGitHubAuthViewController.h */,
 				85C67C2316BCE2EF009CC38D /* AFGitHubAuthViewController.m */,
+				85C67C3216BD233D009CC38D /* AFGitHubOwnerSelectViewController.h */,
+				85C67C3316BD233D009CC38D /* AFGitHubOwnerSelectViewController.m */,
+				85C67C3516BD2427009CC38D /* AFGitHubCreateRepositoryViewController.h */,
+				85C67C3616BD2428009CC38D /* AFGitHubCreateRepositoryViewController.m */,
 			);
 			name = "View Controllers";
 			sourceTree = "<group>";
@@ -517,10 +537,14 @@
 				85C67B9816BB9EC5009CC38D /* NSDate+InternetDateTime.m in Sources */,
 				85C67B9B16BBA08D009CC38D /* AFGitHubGitDataObject.m in Sources */,
 				85C67C1E16BCDAA1009CC38D /* AFGitHubTopViewController.m in Sources */,
-				85C67C2116BCDF81009CC38D /* AFGitHubSampleRepoListViewController.m in Sources */,
+				85C67C2116BCDF81009CC38D /* AFGitHubRepositoryListViewController.m in Sources */,
 				85C67C2416BCE2EF009CC38D /* AFGitHubAuthViewController.m in Sources */,
 				85C67C2D16BCEA1D009CC38D /* NSString+queryComponents.m in Sources */,
 				85C67C3016BCFB5B009CC38D /* NSString+URLEncoding.m in Sources */,
+				85C67C3416BD233F009CC38D /* AFGitHubOwnerSelectViewController.m in Sources */,
+				85C67C3716BD2429009CC38D /* AFGitHubCreateRepositoryViewController.m in Sources */,
+				85C67C3A16BD25AE009CC38D /* AFGitHubOrganization.m in Sources */,
+				85C67C3D16BD2FDF009CC38D /* AFGitHubAPIError.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

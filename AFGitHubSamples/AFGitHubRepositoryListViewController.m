@@ -1,18 +1,18 @@
 //
-//  AFGitHubSampleRepoListViewController.m
+//  AFGitHubRepositoryListViewController.m
 //  AFGitHub
 //
 //  Created by Atsushi Nagase on 2/2/13.
 //  Copyright (c) 2013 LittleApps Inc. All rights reserved.
 //
 
-#import "AFGitHubSampleRepoListViewController.h"
+#import "AFGitHubRepositoryListViewController.h"
 #import "AFGitHub.h"
 #import "AFGitHubGlobal.h"
 #import <BlocksKit/BlocksKit.h>
 #import <SVProgressHUD/SVProgressHUD.h>
 
-@interface AFGitHubSampleRepoListViewController ()
+@interface AFGitHubRepositoryListViewController ()
 
 @property (nonatomic, strong) NSMutableArray *repos;
 @property (nonatomic, copy) NSURL *nextURL;
@@ -21,7 +21,7 @@
 @end
 
 
-@implementation AFGitHubSampleRepoListViewController
+@implementation AFGitHubRepositoryListViewController
 
 - (void)viewDidAppear:(BOOL)animated {
   [super viewDidAppear:animated];
@@ -31,12 +31,14 @@
         [self loadAllRepositories];
         break;
       case AFGitHubRepoOwnerUser: {
-        UIAlertView *av = [UIAlertView alertViewWithTitle:@"Username?"];
+        UIAlertView *av = [UIAlertView alertViewWithTitle:@"Login?"];
         [av setAlertViewStyle:UIAlertViewStylePlainTextInput];
         UITextField *tf = [av textFieldAtIndex:0];
-        [av setCancelButtonWithTitle:@"Cancel" handler:nil];
+        [av setCancelButtonWithTitle:@"Cancel" handler:^{
+          [self.navigationController popToRootViewControllerAnimated:YES];
+        }];
         [av addButtonWithTitle:@"OK" handler:^{
-          [self loadRepositoriesWithUsername:tf.text];
+          [self loadRepositoriesWithUser:tf.text];
         }];
         [av show];
         break;
@@ -48,7 +50,9 @@
         UIAlertView *av = [UIAlertView alertViewWithTitle:@"Organization?"];
         [av setAlertViewStyle:UIAlertViewStylePlainTextInput];
         UITextField *tf = [av textFieldAtIndex:0];
-        [av setCancelButtonWithTitle:@"Cancel" handler:nil];
+        [av setCancelButtonWithTitle:@"Cancel" handler:^{
+          [self.navigationController popToRootViewControllerAnimated:YES];
+        }];
         [av addButtonWithTitle:@"OK" handler:^{
           [self loadRepositoriesWithOrganization:tf.text];
         }];
@@ -66,22 +70,22 @@
   self.isLoading = YES;
   [[AFGitHubAPIClient sharedClient]
    getAllRepositoriesWithParameters:nil
-   success:^(AFGitHubAPIRequestOperation *operation, id responseObject) {
-     [self addReposWithResponse:responseObject];
+   success:^(AFGitHubAPIRequestOperation *operation, AFGitHubAPIResponse *responseObject) {
+     [self addResultsWithResponse:responseObject];
    }
    failure:^(AFGitHubAPIRequestOperation *operation, NSError *error) {
      [self showError:error];
    }];
 }
 
-- (void)loadRepositoriesWithUsername:(NSString *)username {
+- (void)loadRepositoriesWithUser:(NSString *)login {
   [SVProgressHUD showWithStatus:@"Loading" maskType:SVProgressHUDMaskTypeGradient];
   self.isLoading = YES;
   [[AFGitHubAPIClient sharedClient]
-   getRepositoriesWithUsername:username
+   getRepositoriesWithUser:login
    parameters:nil
-   success:^(AFGitHubAPIRequestOperation *operation, id responseObject) {
-     [self addReposWithResponse:responseObject];
+   success:^(AFGitHubAPIRequestOperation *operation, AFGitHubAPIResponse *responseObject) {
+     [self addResultsWithResponse:responseObject];
    }
    failure:^(AFGitHubAPIRequestOperation *operation, NSError *error) {
      [self showError:error];
@@ -94,8 +98,8 @@
   [[AFGitHubAPIClient sharedClient]
    getRepositoriesWithOrganization:organizationName
    parameters:nil
-   success:^(AFGitHubAPIRequestOperation *operation, id responseObject) {
-     [self addReposWithResponse:responseObject];
+   success:^(AFGitHubAPIRequestOperation *operation, AFGitHubAPIResponse *responseObject) {
+     [self addResultsWithResponse:responseObject];
    }
    failure:^(AFGitHubAPIRequestOperation *operation, NSError *error) {
      [self showError:error];
@@ -107,8 +111,8 @@
   self.isLoading = YES;
   [[AFGitHubAPIClient sharedClient]
    getMyRepositoriesWithParameters:nil
-   success:^(AFGitHubAPIRequestOperation *operation, id responseObject) {
-     [self addReposWithResponse:responseObject];
+   success:^(AFGitHubAPIRequestOperation *operation, AFGitHubAPIResponse *responseObject) {
+     [self addResultsWithResponse:responseObject];
    }
    failure:^(AFGitHubAPIRequestOperation *operation, NSError *error) {
      [self showError:error];
@@ -116,30 +120,24 @@
 
 - (void)loadNextURL {
   if(self.nextURL) {
-    AFGitHubAPIClient *client = [AFGitHubAPIClient sharedClient];
-    NSMutableURLRequest *mreq = [client requestWithMethod:@"GET" path:nil parameters:nil];
-    [mreq setURL:self.nextURL];
     self.isLoading = YES;
-    AFGitHubAPIRequestOperation *op =
-    [client
-     HTTPRequestOperationWithRequest:mreq
-     itemClass:[AFGitHubRepository class]
-     success:^(AFGitHubAPIRequestOperation *operation, id responseObject) {
-       [self addReposWithResponse:responseObject];
+    [[AFGitHubAPIClient sharedClient]
+     loadNextURL:self.nextURL withHTTPMethod:@"GET" itemClass:[AFGitHubUser class]
+     success:^(AFGitHubAPIRequestOperation *operation, AFGitHubAPIResponse *responseObject) {
+       [self addResultsWithResponse:responseObject];
      }
      failure:^(AFGitHubAPIRequestOperation *operation, NSError *error) {
        [self showError:error];
      }];
-    [client enqueueHTTPRequestOperation:op];
   }
 }
 
 - (void)showError:(NSError *)error {
   self.isLoading = NO;
-  [SVProgressHUD showErrorWithStatus:error.userInfo[@"message"]];
+  [SVProgressHUD showErrorWithStatus:error.localizedDescription];
 }
 
-- (void)addReposWithResponse:(AFGitHubAPIResponse *)response {
+- (void)addResultsWithResponse:(AFGitHubAPIResponse *)response {
   [SVProgressHUD dismiss];
   self.isLoading = NO;
   AFGitHubRepository *repo = nil;
@@ -163,7 +161,7 @@
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-  UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"AFGitHubRepositoryCell"];
+  UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"RepositoryCell"];
   if(indexPath.row == self.repos.count) {
     [cell.textLabel setText:@"Loading more..."];
     [cell.detailTextLabel setText:nil];

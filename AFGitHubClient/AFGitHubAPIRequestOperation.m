@@ -23,6 +23,7 @@
 
 #import "AFGitHubAPIRequestOperation.h"
 #import "AFGitHubAPIResponse.h"
+#import "AFGitHubAPIError.h"
 
 
 static dispatch_queue_t af_github_request_operation_processing_queue;
@@ -34,7 +35,6 @@ static dispatch_queue_t github_request_operation_processing_queue() {
   return af_github_request_operation_processing_queue;
 }
 
-NSString * const AFGitHubErrorDomain = @"io.ngs.AFGitHubErrorDomain";
 
 @interface AFGitHubAPIRequestOperation ()
 
@@ -50,9 +50,7 @@ NSString * const AFGitHubErrorDomain = @"io.ngs.AFGitHubErrorDomain";
      json[@"message"] &&
      [json[@"message"] isKindOfClass:[NSString class]] &&
      [json[@"message"] length] > 0) {
-    self.apiError = [NSError errorWithDomain:AFGitHubErrorDomain
-                                        code:self.response.statusCode
-                                    userInfo:json];
+    self.apiError = [AFGitHubAPIError errorWithDictionary:json withStatusCode:self.response.statusCode];
   } else {
     _ghResponse = [[AFGitHubAPIResponse alloc] initWithResponse:self.response itemClass:self.itemClass JSON:json];
   }

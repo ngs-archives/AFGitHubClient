@@ -39,3 +39,4 @@
 #import "AFGitHubTag.h"
 #import "AFGitHubTree.h"
 #import "AFGitHubUser.h"
+#import "AFGitHubOrganization.h"

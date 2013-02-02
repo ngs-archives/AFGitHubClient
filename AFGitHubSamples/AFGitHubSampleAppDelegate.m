@@ -26,6 +26,8 @@
 #import "AFNetworkActivityIndicatorManager.h"
 #import "AFGitHubAPIKeys.h"
 #import "AFGitHub.h"
+#import "AFGitHubGlobal.h"
+#import "AFGitHubSampleConstants.h"
 
 @implementation AFGitHubSampleAppDelegate
 
@@ -38,8 +40,15 @@ didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
   [NSURLCache setSharedURLCache:URLCache];
   [[AFNetworkActivityIndicatorManager sharedManager] setEnabled:YES];
   AFGitHubAPIClient *client = [AFGitHubAPIClient clientWithClientID:kAFGitHubClientID secret:kAFGitHubClientSecret];
+  NSString *accessToken = [[NSUserDefaults standardUserDefaults] objectForKey:AFGitHubDefaultsAccessTokenKey];
+  if(AFGitHubIsStringWithAnyText(accessToken))
+    [client setAuthorizationHeaderWithToken:accessToken];
   [AFGitHubAPIClient setSharedClient:client];
   return YES;
+}
+
+- (void)applicationWillResignActive:(UIApplication *)application {
+  [[NSUserDefaults standardUserDefaults] synchronize];
 }
 
 @end

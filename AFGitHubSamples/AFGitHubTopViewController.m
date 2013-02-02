@@ -7,7 +7,7 @@
 //
 
 #import "AFGitHubTopViewController.h"
-#import "AFGitHubSampleRepoListViewController.h"
+#import "AFGitHubRepositoryListViewController.h"
 #import <BlocksKit/BlocksKit.h>
 #import "AFGithub.h"
 
@@ -23,8 +23,9 @@
       handler:^(id sender) {
         [client clearAuthorizationHeader];
         [client clearGitHubCookie];
+        [[NSUserDefaults standardUserDefaults] removeObjectForKey:AFGitHubDefaultsAccessTokenKey];
         [[NSNotificationCenter defaultCenter]
-         postNotificationName:@"AFNotificationGitHubAuthenticationCleared"
+         postNotificationName:AFNotificationGitHubAuthenticationCleared
          object:client userInfo:nil];
       }]];
   } else {
@@ -39,8 +40,8 @@
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
   if([sender isKindOfClass:[UITableViewCell class]]) {
-    if([segue.destinationViewController isKindOfClass:[AFGitHubSampleRepoListViewController class]]) {
-      AFGitHubSampleRepoListViewController *vc = segue.destinationViewController;
+    if([segue.destinationViewController isKindOfClass:[AFGitHubRepositoryListViewController class]]) {
+      AFGitHubRepositoryListViewController *vc = segue.destinationViewController;
       switch ([(UITableViewCell *)sender tag]) {
         case 1:
           vc.owner = AFGitHubRepoOwnerMe;
@@ -55,17 +56,6 @@
           vc.owner = AFGitHubRepoOwnerAll;
           break;
       }
-    } else if([segue.destinationViewController isKindOfClass:[AFGitHubSampleRepoListViewController class]]) {
-      AFGitHubSampleRepoListViewController *vc = segue.destinationViewController;
-      switch ([(UITableViewCell *)sender tag]) {
-        case 5:
-          vc.owner = AFGitHubRepoOwnerMe;
-          break;
-        case 6:
-          vc.owner = AFGitHubRepoOwnerOrganization;
-          break;
-      }
-      
     }
   }
 }

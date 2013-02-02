@@ -49,13 +49,26 @@
   [self.permissions[@"pull"] boolValue];
 }
 
-- (NSDictionary *)asJSON {
-  NSMutableDictionary *buf = @{}.mutableCopy;
-  
-  
-  return buf.copy;
+- (BOOL)isGitHubPages {
+  NSArray *comps = [self.fullName componentsSeparatedByString:@"/"];
+  return [comps count] == 2 && [comps[1] isEqualToString:[NSString stringWithFormat:@"%@.github.com", comps[0]]];
 }
 
+- (NSDictionary *)asJSON {
+  NSMutableDictionary *buf = @{}.mutableCopy;
+  if(AFGitHubIsStringWithAnyText(self.name))
+    buf[@"name"] = self.name;
+  if(AFGitHubIsStringWithAnyText(self.repositoryDescription))
+    buf[@"description"] = self.repositoryDescription;
+  if(AFGitHubIsStringWithAnyText(self.homepage))
+    buf[@"homepage"] = self.homepage;
+  if(self.isPrivate)
+    buf[@"private"]     = [NSNumber numberWithBool:YES];
+  buf[@"has_issues"]    = [NSNumber numberWithBool:self.hasIssues];
+  buf[@"has_downloads"] = [NSNumber numberWithBool:self.hasDownloads];
+  buf[@"has_wiki"]      = [NSNumber numberWithBool:self.hasWiki];
+  return buf.copy;
+}
 
 #pragma mark - Initializing
 

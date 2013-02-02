@@ -1,0 +1,72 @@
+[
+  {
+    "url": "https://api.github.com/orgs/littleapps",
+    "public_members_url": "https://api.github.com/orgs/littleapps/public_members{/member}",
+    "repos_url": "https://api.github.com/orgs/littleapps/repos",
+    "events_url": "https://api.github.com/orgs/littleapps/events",
+    "avatar_url": "https://secure.gravatar.com/avatar/403ec914d367b92c61de3a152a60e6d8?d=https://a248.e.akamai.net/assets.github.com%2Fimages%2Fgravatars%2Fgravatar-org-420.png",
+    "id": 436132,
+    "members_url": "https://api.github.com/orgs/littleapps/members{/member}",
+    "login": "littleapps"
+  },
+  {
+    "url": "https://api.github.com/orgs/recruit-webservice",
+    "public_members_url": "https://api.github.com/orgs/recruit-webservice/public_members{/member}",
+    "repos_url": "https://api.github.com/orgs/recruit-webservice/repos",
+    "events_url": "https://api.github.com/orgs/recruit-webservice/events",
+    "avatar_url": "https://secure.gravatar.com/avatar/229ee5d5b02e59048dc21a8c8f77db14?d=https://a248.e.akamai.net/assets.github.com%2Fimages%2Fgravatars%2Fgravatar-org-420.png",
+    "id": 891909,
+    "members_url": "https://api.github.com/orgs/recruit-webservice/members{/member}",
+    "login": "recruit-webservice"
+  },
+  {
+    "url": "https://api.github.com/orgs/tattva",
+    "public_members_url": "https://api.github.com/orgs/tattva/public_members{/member}",
+    "repos_url": "https://api.github.com/orgs/tattva/repos",
+    "events_url": "https://api.github.com/orgs/tattva/events",
+    "avatar_url": "https://secure.gravatar.com/avatar/c2d044f2bfe16eefb05f36e8bd5830df?d=https://a248.e.akamai.net/assets.github.com%2Fimages%2Fgravatars%2Fgravatar-org-420.png",
+    "id": 1010399,
+    "members_url": "https://api.github.com/orgs/tattva/members{/member}",
+    "login": "tattva"
+  },
+  {
+    "url": "https://api.github.com/orgs/CocoaPods",
+    "public_members_url": "https://api.github.com/orgs/CocoaPods/public_members{/member}",
+    "repos_url": "https://api.github.com/orgs/CocoaPods/repos",
+    "events_url": "https://api.github.com/orgs/CocoaPods/events",
+    "avatar_url": "https://secure.gravatar.com/avatar/8b374a26ac900a5c7b83a8767faff333?d=https://a248.e.akamai.net/assets.github.com%2Fimages%2Fgravatars%2Fgravatar-org-420.png",
+    "id": 1189714,
+    "members_url": "https://api.github.com/orgs/CocoaPods/members{/member}",
+    "login": "CocoaPods"
+  },
+  {
+    "url": "https://api.github.com/orgs/githubkit",
+    "public_members_url": "https://api.github.com/orgs/githubkit/public_members{/member}",
+    "repos_url": "https://api.github.com/orgs/githubkit/repos",
+    "events_url": "https://api.github.com/orgs/githubkit/events",
+    "avatar_url": "https://secure.gravatar.com/avatar/451c65e2719f87c4379ccaa27afd8411?d=https://a248.e.akamai.net/assets.github.com%2Fimages%2Fgravatars%2Fgravatar-org-420.png",
+    "id": 1633440,
+    "members_url": "https://api.github.com/orgs/githubkit/members{/member}",
+    "login": "githubkit"
+  },
+  {
+    "url": "https://api.github.com/orgs/appsocially",
+    "public_members_url": "https://api.github.com/orgs/appsocially/public_members{/member}",
+    "repos_url": "https://api.github.com/orgs/appsocially/repos",
+    "events_url": "https://api.github.com/orgs/appsocially/events",
+    "avatar_url": "https://secure.gravatar.com/avatar/ab14eb9ba2f9f00d846fb44ec78b7233?d=https://a248.e.akamai.net/assets.github.com%2Fimages%2Fgravatars%2Fgravatar-org-420.png",
+    "id": 1663098,
+    "members_url": "https://api.github.com/orgs/appsocially/members{/member}",
+    "login": "appsocially"
+  },
+  {
+    "url": "https://api.github.com/orgs/qiita-github-api-hackathon",
+    "public_members_url": "https://api.github.com/orgs/qiita-github-api-hackathon/public_members{/member}",
+    "repos_url": "https://api.github.com/orgs/qiita-github-api-hackathon/repos",
+    "events_url": "https://api.github.com/orgs/qiita-github-api-hackathon/events",
+    "avatar_url": "https://secure.gravatar.com/avatar/a42654d10bb5293ca1bfe6ab3ea049e5?d=https://a248.e.akamai.net/assets.github.com%2Fimages%2Fgravatars%2Fgravatar-org-420.png",
+    "id": 3438320,
+    "members_url": "https://api.github.com/orgs/qiita-github-api-hackathon/members{/member}",
+    "login": "qiita-github-api-hackathon"
+  }
+]

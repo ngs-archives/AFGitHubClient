@@ -8,6 +8,7 @@
 
 #import "AFGitHubAuthViewController.h"
 #import "AFGitHubAPIKeys.h"
+#import "AFGitHubSampleConstants.h"
 #import "AFGitHub.h"
 
 @implementation AFGitHubAuthViewController
@@ -24,15 +25,15 @@
 - (BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType {
   if([AFGitHubAPIClient isAuthFormURL:request.URL])
     return YES;
-  
   AFGitHubAPIClient *client = [AFGitHubAPIClient sharedClient];
   if([client
       handleOpenURL:request.URL
       withCallbackURLString:kAFGitHubCallbackURL
       success:^(AFOAuthCredential *credential) {
         [[NSNotificationCenter defaultCenter]
-         postNotificationName:@"AFNotificationGitHubAuthenticationSuccess"
+         postNotificationName:AFNotificationGitHubAuthenticationSuccess
          object:client userInfo:@{ @"credential": credential }];
+        [[NSUserDefaults standardUserDefaults] setObject:credential.accessToken forKey:AFGitHubDefaultsAccessTokenKey];
         [self dismissViewControllerAnimated:YES completion:nil];
       }
       failure:^(NSError *error) {
