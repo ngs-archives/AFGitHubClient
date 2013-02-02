@@ -7,22 +7,10 @@
 //
 
 #import <UIKit/UIKit.h>
-
-typedef enum {
-  AFGitHubRepoMehtodList,
-  AFGitHubRepoMehtodCreate
-} AFGitHubRepoMehtod;
-
-typedef enum {
-  AFGitHubRepoOwnerMe,
-  AFGitHubRepoOwnerUser,
-  AFGitHubRepoOwnerOrganization,
-  AFGitHubRepoOwnerAll
-} AFGitHubRepoOwner;
+#import "AFGitHubSampleConstants.h"
 
 @interface AFGitHubSampleRepoListViewController : UITableViewController
 
-@property (nonatomic, assign) AFGitHubRepoMehtod method;
 @property (nonatomic, assign) AFGitHubRepoOwner owner;
 
 @end

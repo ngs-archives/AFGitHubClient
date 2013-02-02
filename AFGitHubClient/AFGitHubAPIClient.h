@@ -22,7 +22,9 @@
 //  THE SOFTWARE.
 
 #import "AFOAuth2Client.h"
+#import "AFGitHubConstants.h"
 
+@class AFGitHubAPIRequestOperation;
 @interface AFGitHubAPIClient : AFOAuth2Client
 
 + (AFGitHubAPIClient *)clientWithClientID:(NSString *)clientID secret:(NSString *)secret;
@@ -30,6 +32,8 @@
 
 + (AFGitHubAPIClient *)sharedClient;
 + (void)setSharedClient:(AFGitHubAPIClient *)client;
+
+#pragma mark - Authentication
 
 + (BOOL)isAuthFormURL:(NSURL *)URL;
 - (BOOL)handleOpenURL:(NSURL *)URL withCallbackURLString:(NSString *)callbackURLString
@@ -40,5 +44,64 @@
                                   scope:(NSArray *)scope;
 
 - (BOOL)isAuthenticated;
+- (void)clearGitHubCookie;
+
+- (AFGitHubAPIRequestOperation *)HTTPRequestOperationWithRequest:(NSURLRequest *)urlRequest
+itemClass:(Class)class
+success:(void (^)(AFGitHubAPIRequestOperation *operation, id responseObject))success
+failure:(void (^)(AFGitHubAPIRequestOperation *operation, NSError *error))failure;
+
+#pragma mark - HTTP Verbs
+
+- (void)getPath:(NSString *)path
+     parameters:(NSDictionary *)parameters
+      itemClass:(Class)itemClass
+        success:(void (^)(AFGitHubAPIRequestOperation *operation, id responseObject))success
+        failure:(void (^)(AFGitHubAPIRequestOperation *operation, NSError *error))failure;
+
+- (void)postPath:(NSString *)path
+      parameters:(NSDictionary *)parameters
+       itemClass:(Class)itemClass
+         success:(void (^)(AFGitHubAPIRequestOperation *operation, id responseObject))success
+         failure:(void (^)(AFGitHubAPIRequestOperation *operation, NSError *error))failure;
+
+- (void)putPath:(NSString *)path
+     parameters:(NSDictionary *)parameters
+      itemClass:(Class)itemClass
+        success:(void (^)(AFGitHubAPIRequestOperation *operation, id responseObject))success
+        failure:(void (^)(AFGitHubAPIRequestOperation *operation, NSError *error))failure;
+
+- (void)deletePath:(NSString *)path
+        parameters:(NSDictionary *)parameters
+         itemClass:(Class)itemClass
+           success:(void (^)(AFGitHubAPIRequestOperation *operation, id responseObject))success
+           failure:(void (^)(AFGitHubAPIRequestOperation *operation, NSError *error))failure;
+
+- (void)patchPath:(NSString *)path
+       parameters:(NSDictionary *)parameters
+        itemClass:(Class)itemClass
+          success:(void (^)(AFGitHubAPIRequestOperation *operation, id responseObject))success
+          failure:(void (^)(AFGitHubAPIRequestOperation *operation, NSError *error))failure;
+
+#pragma mark - Repos API
+
+- (void)getRepositoriesWithUsername:(NSString *)username
+                         parameters:(NSDictionary *)parameters
+                            success:(void (^)(AFGitHubAPIRequestOperation *operation, id responseObject))success
+                            failure:(void (^)(AFGitHubAPIRequestOperation *operation, NSError *error))failure;
+
+- (void)getRepositoriesWithOrganization:(NSString *)organizationName
+                             parameters:(NSDictionary *)parameters
+                                success:(void (^)(AFGitHubAPIRequestOperation *operation, id responseObject))success
+                                failure:(void (^)(AFGitHubAPIRequestOperation *operation, NSError *error))failure;
+
+- (void)getMyRepositoriesWithParameters:(NSDictionary *)parameters
+                                success:(void (^)(AFGitHubAPIRequestOperation *operation, id responseObject))success
+                                failure:(void (^)(AFGitHubAPIRequestOperation *operation, NSError *error))failure;
+
+- (void)getAllRepositoriesWithParameters:(NSDictionary *)parameters
+                                 success:(void (^)(AFGitHubAPIRequestOperation *operation, id responseObject))success
+                                 failure:(void (^)(AFGitHubAPIRequestOperation *operation, NSError *error))failure;
+
 
 @end

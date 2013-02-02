@@ -16,7 +16,7 @@
   [super viewDidAppear:animated];
   if(!self.webView.request) {
     NSURL *URL = [[AFGitHubAPIClient sharedClient] authURLWithCallbackURLString:kAFGitHubCallbackURL
-                                                                          scope:@[@"gist", @"repo"]];
+                                                                          scope:@[@"repo"]];
     [self.webView loadRequest:[NSURLRequest requestWithURL:URL]];
   }
 }
@@ -31,7 +31,7 @@
       withCallbackURLString:kAFGitHubCallbackURL
       success:^(AFOAuthCredential *credential) {
         [[NSNotificationCenter defaultCenter]
-         postNotificationName:@"AFGitHubAuthenticationSuccess"
+         postNotificationName:@"AFNotificationGitHubAuthenticationSuccess"
          object:client userInfo:@{ @"credential": credential }];
         [self dismissViewControllerAnimated:YES completion:nil];
       }

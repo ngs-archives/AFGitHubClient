@@ -22,6 +22,10 @@
       initWithTitle:@"Logout" style:UIBarButtonItemStyleBordered
       handler:^(id sender) {
         [client clearAuthorizationHeader];
+        [client clearGitHubCookie];
+        [[NSNotificationCenter defaultCenter]
+         postNotificationName:@"AFNotificationGitHubAuthenticationCleared"
+         object:client userInfo:nil];
       }]];
   } else {
     [self.navigationItem setRightBarButtonItem:
@@ -34,39 +38,37 @@
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-  AFGitHubSampleRepoListViewController *vc = segue.destinationViewController;
   if([sender isKindOfClass:[UITableViewCell class]]) {
-    switch ([(UITableViewCell *)sender tag]) {
-      case 1:
-        vc.method = AFGitHubRepoMehtodList;
-        vc.owner = AFGitHubRepoOwnerMe;
-        break;
-      case 2:
-        vc.method = AFGitHubRepoMehtodList;
-        vc.owner = AFGitHubRepoOwnerUser;
-        break;
-      case 3:
-        vc.method = AFGitHubRepoMehtodList;
-        vc.owner = AFGitHubRepoOwnerOrganization;
-        break;
-      case 4:
-        vc.method = AFGitHubRepoMehtodList;
-        vc.owner = AFGitHubRepoOwnerAll;
-        break;
-      case 5:
-        vc.method = AFGitHubRepoMehtodCreate;
-        vc.owner = AFGitHubRepoOwnerMe;
-        break;
-      case 6:
-        vc.method = AFGitHubRepoMehtodCreate;
-        vc.owner = AFGitHubRepoOwnerOrganization;
-        break;
+    if([segue.destinationViewController isKindOfClass:[AFGitHubSampleRepoListViewController class]]) {
+      AFGitHubSampleRepoListViewController *vc = segue.destinationViewController;
+      switch ([(UITableViewCell *)sender tag]) {
+        case 1:
+          vc.owner = AFGitHubRepoOwnerMe;
+          break;
+        case 2:
+          vc.owner = AFGitHubRepoOwnerUser;
+          break;
+        case 3:
+          vc.owner = AFGitHubRepoOwnerOrganization;
+          break;
+        case 4:
+          vc.owner = AFGitHubRepoOwnerAll;
+          break;
+      }
+    } else if([segue.destinationViewController isKindOfClass:[AFGitHubSampleRepoListViewController class]]) {
+      AFGitHubSampleRepoListViewController *vc = segue.destinationViewController;
+      switch ([(UITableViewCell *)sender tag]) {
+        case 5:
+          vc.owner = AFGitHubRepoOwnerMe;
+          break;
+        case 6:
+          vc.owner = AFGitHubRepoOwnerOrganization;
+          break;
+      }
+      
     }
   }
 }
-
-
-
 
 
 @end

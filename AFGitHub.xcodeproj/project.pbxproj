@@ -145,6 +145,7 @@
 		85C67C2C16BCEA1C009CC38D /* NSString+queryComponents.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+queryComponents.m"; sourceTree = "<group>"; };
 		85C67C2E16BCFB5B009CC38D /* NSString+URLEncoding.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+URLEncoding.h"; sourceTree = "<group>"; };
 		85C67C2F16BCFB5B009CC38D /* NSString+URLEncoding.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+URLEncoding.m"; sourceTree = "<group>"; };
+		85C67C3116BD0114009CC38D /* AFGitHubSampleConstants.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AFGitHubSampleConstants.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -209,6 +210,7 @@
 			isa = PBXGroup;
 			children = (
 				85C67C2516BCE366009CC38D /* AFGitHubAPIKeys.h */,
+				85C67C3116BD0114009CC38D /* AFGitHubSampleConstants.h */,
 				85C67C1B16BCDA7B009CC38D /* View Controllers */,
 				85C67A9016BA183C009CC38D /* Podfile */,
 				85C67A9E16BA183C009CC38D /* AFGitHubSampleAppDelegate.h */,

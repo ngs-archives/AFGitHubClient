@@ -22,14 +22,27 @@
 //  THE SOFTWARE.
 
 #import "AFGitHubAPIClient.h"
-#import "AFJSONRequestOperation.h"
 #import "AFGitHubAPIRequestOperation.h"
-#import "AFNetworkActivityIndicatorManager.h"
-#import "AFGitHubConstants.h"
 #import "AFGitHubAPIResponse.h"
-#import "NSString+queryComponents.h"
+#import "AFGitHubBlob.h"
+#import "AFGitHubComment.h"
+#import "AFGitHubCommit.h"
+#import "AFGitHubConstants.h"
+#import "AFGitHubGitDataObject.h"
+#import "AFGitHubGitObject.h"
 #import "AFGitHubGlobal.h"
+#import "AFGitHubLinkHeader.h"
+#import "AFGitHubObject.h"
+#import "AFGitHubPullRequest.h"
+#import "AFGitHubReference.h"
+#import "AFGitHubRepository.h"
+#import "AFGitHubTag.h"
+#import "AFGitHubTree.h"
+#import "AFGitHubUser.h"
+#import "AFJSONRequestOperation.h"
+#import "AFNetworkActivityIndicatorManager.h"
 #import "NSString+URLEncoding.h"
+#import "NSString+queryComponents.h"
 
 static NSString * const kAFGitHubAPIBaseURLString = @"https://api.github.com";
 static NSString * const kAFGitHubAPINakedBaseURLString = @"https://github.com";
@@ -59,11 +72,13 @@ static AFGitHubAPIClient *_sharedClient = nil;
 
 - (id)initWithBaseURL:(NSURL *)url clientID:(NSString *)clientID secret:(NSString *)secret {
   if (self = [super initWithBaseURL:url clientID:clientID secret:secret]) {
-    [self registerHTTPOperationClass:[AFJSONRequestOperation class]];
+    [self registerHTTPOperationClass:[AFGitHubAPIRequestOperation class]];
     [self setDefaultHeader:@"Accept" value:@"application/vnd.github.full+json"];
   }
   return self;
 }
+
+#pragma mark - AFHTTPClient
 
 - (AFHTTPClientParameterEncoding)parameterEncoding {
   return AFJSONParameterEncoding;
@@ -83,6 +98,123 @@ static AFGitHubAPIClient *_sharedClient = nil;
   return op;
 }
 
+- (NSMutableURLRequest *)requestWithMethod:(NSString *)method
+                                      path:(NSString *)path
+                                parameters:(NSDictionary *)parameters {
+  NSMutableURLRequest *request = [super requestWithMethod:method path:path parameters:parameters];
+  if(([path isEqualToString:kAFGitHubAPIAccessTokenPath] &&
+      [method.uppercaseString isEqualToString:@"POST"]))
+    [request setURL:[NSURL URLWithString:kAFGitHubAPIAccessTokenPath
+                           relativeToURL:[NSURL URLWithString:kAFGitHubAPINakedBaseURLString]]];
+  return request;
+}
+
+
+- (AFGitHubAPIRequestOperation *)HTTPRequestOperationWithRequest:(NSURLRequest *)urlRequest
+                                                       itemClass:(Class)itemClass
+                                                         success:(void (^)(AFGitHubAPIRequestOperation *operation, id responseObject))success
+                                                         failure:(void (^)(AFGitHubAPIRequestOperation *operation, NSError *error))failure {
+  AFGitHubAPIRequestOperation *op = (AFGitHubAPIRequestOperation *)
+  [self HTTPRequestOperationWithRequest:urlRequest
+                                success:^(AFHTTPRequestOperation *operation, id responseObject) {
+                                  AFGitHubAPIRequestOperation *op = (AFGitHubAPIRequestOperation *)operation;
+                                  success(op, op.ghResponse);
+                                }
+                                failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+                                  failure((AFGitHubAPIRequestOperation *)operation, error);
+                                }];
+  [op setItemClass:itemClass];
+  return op;
+}
+
+#pragma mark - HTTP Verbs
+
+- (void)getPath:(NSString *)path
+     parameters:(NSDictionary *)parameters
+      itemClass:(Class)itemClass
+        success:(void (^)(AFGitHubAPIRequestOperation *operation, id responseObject))success
+        failure:(void (^)(AFGitHubAPIRequestOperation *operation, NSError *error))failure {
+	NSURLRequest *request = [self requestWithMethod:@"GET" path:path parameters:parameters];
+  AFGitHubAPIRequestOperation *operation =
+  [self
+   HTTPRequestOperationWithRequest:request itemClass:itemClass
+   success:^(AFGitHubAPIRequestOperation *operation, id responseObject) {
+     AFGitHubAPIRequestOperation *op = (AFGitHubAPIRequestOperation *)operation;
+     success(op, op.ghResponse);
+   }
+   failure:failure];
+  [self enqueueHTTPRequestOperation:operation];
+}
+
+- (void)postPath:(NSString *)path
+      parameters:(NSDictionary *)parameters
+       itemClass:(Class)itemClass
+         success:(void (^)(AFGitHubAPIRequestOperation *operation, id responseObject))success
+         failure:(void (^)(AFGitHubAPIRequestOperation *operation, NSError *error))failure {
+	NSURLRequest *request = [self requestWithMethod:@"POST" path:path parameters:parameters];
+  AFGitHubAPIRequestOperation *operation =
+  [self
+   HTTPRequestOperationWithRequest:request itemClass:itemClass
+   success:^(AFGitHubAPIRequestOperation *operation, id responseObject) {
+     AFGitHubAPIRequestOperation *op = (AFGitHubAPIRequestOperation *)operation;
+     success(op, op.ghResponse);
+   }
+   failure:failure];
+  [self enqueueHTTPRequestOperation:operation];
+}
+
+- (void)putPath:(NSString *)path
+     parameters:(NSDictionary *)parameters
+      itemClass:(Class)itemClass
+        success:(void (^)(AFGitHubAPIRequestOperation *operation, id responseObject))success
+        failure:(void (^)(AFGitHubAPIRequestOperation *operation, NSError *error))failure {
+	NSURLRequest *request = [self requestWithMethod:@"PUT" path:path parameters:parameters];
+  AFGitHubAPIRequestOperation *operation =
+  [self
+   HTTPRequestOperationWithRequest:request itemClass:itemClass
+   success:^(AFGitHubAPIRequestOperation *operation, id responseObject) {
+     AFGitHubAPIRequestOperation *op = (AFGitHubAPIRequestOperation *)operation;
+     success(op, op.ghResponse);
+   }
+   failure:failure];
+  [self enqueueHTTPRequestOperation:operation];
+}
+
+- (void)deletePath:(NSString *)path
+        parameters:(NSDictionary *)parameters
+         itemClass:(Class)itemClass
+           success:(void (^)(AFGitHubAPIRequestOperation *operation, id responseObject))success
+           failure:(void (^)(AFGitHubAPIRequestOperation *operation, NSError *error))failure {
+	NSURLRequest *request = [self requestWithMethod:@"DELETE" path:path parameters:parameters];
+  AFGitHubAPIRequestOperation *operation =
+  [self
+   HTTPRequestOperationWithRequest:request itemClass:itemClass
+   success:^(AFGitHubAPIRequestOperation *operation, id responseObject) {
+     AFGitHubAPIRequestOperation *op = (AFGitHubAPIRequestOperation *)operation;
+     success(op, op.ghResponse);
+   }
+   failure:failure];
+  [self enqueueHTTPRequestOperation:operation];
+}
+
+- (void)patchPath:(NSString *)path
+       parameters:(NSDictionary *)parameters
+        itemClass:(Class)itemClass
+          success:(void (^)(AFGitHubAPIRequestOperation *operation, id responseObject))success
+          failure:(void (^)(AFGitHubAPIRequestOperation *operation, NSError *error))failure {
+  NSURLRequest *request = [self requestWithMethod:@"PATCH" path:path parameters:parameters];
+  AFGitHubAPIRequestOperation *operation =
+  [self
+   HTTPRequestOperationWithRequest:request itemClass:itemClass
+   success:^(AFGitHubAPIRequestOperation *operation, id responseObject) {
+     AFGitHubAPIRequestOperation *op = (AFGitHubAPIRequestOperation *)operation;
+     success(op, op.ghResponse);
+   }
+   failure:failure];
+  [self enqueueHTTPRequestOperation:operation];
+}
+
+
 #pragma mark - Authentication
 
 + (BOOL)isAuthFormURL:(NSURL *)URL {
@@ -98,6 +230,12 @@ static AFGitHubAPIClient *_sharedClient = nil;
    );
 }
 
+- (void)clearGitHubCookie {
+  NSHTTPCookieStorage *storage = [NSHTTPCookieStorage sharedHTTPCookieStorage];
+  for (NSHTTPCookie *cookie in [storage cookies]) {
+    [storage deleteCookie:cookie];
+  }
+}
 
 - (BOOL)handleOpenURL:(NSURL *)URL withCallbackURLString:(NSString *)callbackURLString
               success:(void (^)(AFOAuthCredential *credential))success
@@ -133,18 +271,44 @@ static AFGitHubAPIClient *_sharedClient = nil;
            [scope componentsJoinedByString:@","].URLEncodedString]];
 }
 
-#pragma mark - AFNetworkClient
+#pragma mark - Repos API
 
-- (NSMutableURLRequest *)requestWithMethod:(NSString *)method
-                                      path:(NSString *)path
-                                parameters:(NSDictionary *)parameters {
-  NSMutableURLRequest *request = [super requestWithMethod:method path:path parameters:parameters];
-  if(([path isEqualToString:kAFGitHubAPIAccessTokenPath] &&
-      [method.uppercaseString isEqualToString:@"POST"]))
-    [request setURL:[NSURL URLWithString:kAFGitHubAPIAccessTokenPath
-                           relativeToURL:[NSURL URLWithString:kAFGitHubAPINakedBaseURLString]]];
-  return request;
+- (void)getRepositoriesWithUsername:(NSString *)username
+                         parameters:(NSDictionary *)parameters
+                            success:(void (^)(AFGitHubAPIRequestOperation *operation, id responseObject))success
+                            failure:(void (^)(AFGitHubAPIRequestOperation *operation, NSError *error))failure {
+  [self getPath:[NSString stringWithFormat:@"/users/%@/repos", username]
+     parameters:parameters
+      itemClass:[AFGitHubRepository class]
+        success:success failure:failure];
 }
 
+- (void)getRepositoriesWithOrganization:(NSString *)organizationName
+                             parameters:(NSDictionary *)parameters
+                                success:(void (^)(AFGitHubAPIRequestOperation *operation, id responseObject))success
+                                failure:(void (^)(AFGitHubAPIRequestOperation *operation, NSError *error))failure {
+  [self getPath:[NSString stringWithFormat:@"/orgs/%@/repos", organizationName]
+     parameters:parameters
+      itemClass:[AFGitHubRepository class]
+        success:success failure:failure];
+}
+
+- (void)getMyRepositoriesWithParameters:(NSDictionary *)parameters
+                                success:(void (^)(AFGitHubAPIRequestOperation *operation, id responseObject))success
+                                failure:(void (^)(AFGitHubAPIRequestOperation *operation, NSError *error))failure {
+  [self getPath:@"/user/repos"
+     parameters:parameters
+      itemClass:[AFGitHubRepository class]
+        success:success failure:failure];
+}
+
+- (void)getAllRepositoriesWithParameters:(NSDictionary *)parameters
+                                 success:(void (^)(AFGitHubAPIRequestOperation *operation, id responseObject))success
+                                 failure:(void (^)(AFGitHubAPIRequestOperation *operation, NSError *error))failure {
+  [self getPath:@"/repositories"
+     parameters:parameters
+      itemClass:[AFGitHubRepository class]
+        success:success failure:failure];
+}
 
 @end

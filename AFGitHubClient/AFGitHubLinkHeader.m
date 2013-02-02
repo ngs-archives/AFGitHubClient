@@ -64,7 +64,8 @@
          ) {
         kv = [kv substringWithRange:NSMakeRange(1, kv.length-2)];
         NSURL *URL = [NSURL URLWithString:kv relativeToURL:self.baseURL];
-        [mdic setObject:URL forKey:@"href"];
+        if(URL)
+          [mdic setObject:URL forKey:@"href"];
         continue;
       }
       NSArray *kva = [kv componentsSeparatedByString:@"="];
@@ -91,7 +92,7 @@
 - (NSArray *)URLsForKey:(NSString *)key value:(NSString *)value {
   NSMutableArray *buf = [NSMutableArray array];
   for (NSDictionary *link in self.links) {
-    if([value isEqualToString:[link valueForKey:key]]) {
+    if([value isEqualToString:[link valueForKey:key]] && [link objectForKey:@"href"]) {
       [buf addObject:[link objectForKey:@"href"]];
     }
   }

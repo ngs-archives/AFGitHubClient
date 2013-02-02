@@ -24,6 +24,16 @@
 #import "AFGitHubAPIRequestOperation.h"
 #import "AFGitHubAPIResponse.h"
 
+
+static dispatch_queue_t af_github_request_operation_processing_queue;
+static dispatch_queue_t github_request_operation_processing_queue() {
+  if (af_github_request_operation_processing_queue == NULL) {
+    af_github_request_operation_processing_queue = dispatch_queue_create("com.alamofire.networking.github-request.processing", 0);
+  }
+  
+  return af_github_request_operation_processing_queue;
+}
+
 NSString * const AFGitHubErrorDomain = @"io.ngs.AFGitHubErrorDomain";
 
 @interface AFGitHubAPIRequestOperation ()
@@ -44,9 +54,53 @@ NSString * const AFGitHubErrorDomain = @"io.ngs.AFGitHubErrorDomain";
                                         code:self.response.statusCode
                                     userInfo:json];
   } else {
-    _ghResponse = [[AFGitHubAPIResponse alloc] init];
+    _ghResponse = [[AFGitHubAPIResponse alloc] initWithResponse:self.response itemClass:self.itemClass JSON:json];
   }
   return json;
+}
+
+- (NSError *)error {
+  if (_apiError) {
+    return _apiError;
+  } else {
+    return [super error];
+  }
+}
+
+
+- (void)setCompletionBlockWithSuccess:(void (^)(AFHTTPRequestOperation *operation, id responseObject))success
+                              failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure
+{
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Warc-retain-cycles"
+  self.completionBlock = ^ {
+    if (self.error) {
+      if (failure) {
+        dispatch_async(self.failureCallbackQueue ?: dispatch_get_main_queue(), ^{
+          failure(self, self.error);
+        });
+      }
+    } else {
+      dispatch_async(github_request_operation_processing_queue(), ^{
+        id JSON = self.responseJSON;
+        
+        if (self.apiError) {
+          if (failure) {
+            dispatch_async(self.failureCallbackQueue ?: dispatch_get_main_queue(), ^{
+              failure(self, self.error);
+            });
+          }
+        } else {
+          if (success) {
+            dispatch_async(self.successCallbackQueue ?: dispatch_get_main_queue(), ^{
+              success(self, JSON);
+            });
+          }
+        }
+      });
+    }
+  };
+#pragma clang diagnostic pop
 }
 
 @end

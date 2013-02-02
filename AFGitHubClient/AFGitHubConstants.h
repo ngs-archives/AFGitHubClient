@@ -22,6 +22,4 @@
 //  THE SOFTWARE.
 
 #import <Foundation/Foundation.h>
-@class AFGitHubAPIResponse;
 
-typedef void (^AFGitHubAPIResponseBlock)(AFGitHubAPIResponse *response);

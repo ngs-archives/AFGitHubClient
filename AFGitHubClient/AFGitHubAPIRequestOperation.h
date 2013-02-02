@@ -29,5 +29,6 @@ extern NSString * const AFGitHubErrorDomain;
 @interface AFGitHubAPIRequestOperation : AFJSONRequestOperation
 
 @property (nonatomic, readonly) AFGitHubAPIResponse *ghResponse;
+@property (nonatomic, copy) Class itemClass;
 
 @end
