@@ -54,7 +54,7 @@
     dict[@"base_tree"] = self.baseTree.SHA;
   for (AFGitHubGitDataObject *obj in self.objects) {
     NSMutableDictionary *mdic = [[obj asJSON] mutableCopy];
-    mdic[@"mode"] = obj.mode;
+    mdic[@"mode"] = obj.mode ? obj.mode : AFGitHubDataModeFile;
     mdic[@"type"] = obj.type;
     mdic[@"path"] = obj.path;
     [buf addObject:mdic.copy];
@@ -105,11 +105,7 @@
 - (AFGitHubTree *)createTreeWithAddingBlobs:(NSArray *)blobs {
   AFGitHubTree *tree = [[AFGitHubTree alloc] init];
   tree.baseTree = self;
-  NSMutableArray *buf = [self.objects mutableCopy];
-  for (AFGitHubBlob *blob in blobs) {
-    [buf addObject:blob];
-  }
-  tree.objects = [buf copy];
+  tree.objects = blobs.mutableCopy;
   return tree;
 }
 

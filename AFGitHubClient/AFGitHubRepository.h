@@ -28,10 +28,29 @@
 AFGitHubAPIRequestOperation,
 AFGitHubBlob,
 AFGitHubTree,
+AFGitHubCommit,
+AFGitHubReference,
 AFGitHubAPIResponse;
 @interface AFGitHubRepository : NSObject<AFGitHubObject>
 
 - (NSURL *)gitHubPagesURL;
+- (NSString *)gitHubPageRefString;
+
+
+#pragma mark - References API
+
+- (void)getReference:(NSString *)ref
+             success:(void (^)(AFGitHubAPIRequestOperation *operation, AFGitHubAPIResponse *responseObject))success
+             failure:(void (^)(AFGitHubAPIRequestOperation *operation, NSError *error))failure;
+
+- (void)createReference:(AFGitHubReference *)reference
+                success:(void (^)(AFGitHubAPIRequestOperation *operation, AFGitHubAPIResponse *responseObject))success
+                failure:(void (^)(AFGitHubAPIRequestOperation *operation, NSError *error))failure;
+
+- (void)updateReference:(AFGitHubReference *)reference
+                  force:(BOOL)force
+                success:(void (^)(AFGitHubAPIRequestOperation *operation, AFGitHubAPIResponse *responseObject))success
+                failure:(void (^)(AFGitHubAPIRequestOperation *operation, NSError *error))failure;
 
 #pragma mark - Repos API
 
@@ -63,6 +82,25 @@ AFGitHubAPIResponse;
 - (void)createTree:(AFGitHubTree *)tree
            success:(void (^)(AFGitHubAPIRequestOperation *operation, AFGitHubAPIResponse *responseObject))success
            failure:(void (^)(AFGitHubAPIRequestOperation *operation, NSError *error))failure;
+
+#pragma mark - Commits API
+
+- (void)getCommitWithSHA:(NSString *)SHA
+                 success:(void (^)(AFGitHubAPIRequestOperation *operation, AFGitHubAPIResponse *responseObject))success
+                 failure:(void (^)(AFGitHubAPIRequestOperation *operation, NSError *error))failure;
+
+- (void)createCommit:(AFGitHubCommit *)commit
+             success:(void (^)(AFGitHubAPIRequestOperation *operation, AFGitHubAPIResponse *responseObject))success
+             failure:(void (^)(AFGitHubAPIRequestOperation *operation, NSError *error))failure;
+
+#pragma mark - Trees + Commits + References API
+
+- (void)createCommitWithTree:(AFGitHubTree *)tree
+                      forRef:(NSString *)refString
+                     message:(NSString *)message
+                       force:(BOOL)force
+                     success:(void (^)(AFGitHubAPIRequestOperation *operation, AFGitHubAPIResponse *responseObject))success
+                     failure:(void (^)(AFGitHubAPIRequestOperation *operation, NSError *error))failure;
 
 @property (nonatomic, assign) BOOL hasDownloads;
 @property (nonatomic, assign) BOOL hasIssues;

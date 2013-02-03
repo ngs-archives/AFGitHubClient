@@ -54,6 +54,7 @@
       } else if([encoding isEqualToString:@"utf-8"]) {
         [self setContent:content];
       }
+      self.encoding = encoding;
     }
     id val = dictonary[@"size"];
     if([val isKindOfClass:[NSNumber class]])
@@ -66,8 +67,12 @@
   NSMutableDictionary *dict = @{}.mutableCopy;
   if(AFGitHubIsStringWithAnyText(self.SHA))
     dict[@"sha"] = self.SHA;
-  else if(AFGitHubIsStringWithAnyText(self.content)) {
+  else if([self.encoding isEqualToString:@"utf-8"]) {
     dict[@"content"] = self.content;
+    dict[@"encoding"] = @"utf-8";
+  } else if(self.data) {
+    dict[@"content"] = self.base64Content;
+    dict[@"encoding"] = @"base64";
   }
   return dict.copy;
 }
@@ -87,10 +92,12 @@
 
 - (void)setJPEGImageContent:(UIImage *)imageContent
      withCompressionQuality:(CGFloat)quality {
+  self.encoding = @"base64";
   [self setData:UIImageJPEGRepresentation(imageContent, quality)];
 }
 
 - (void)setPNGImageContent:(UIImage *)imageContent {
+  self.encoding = @"base64";
   [self setData:UIImagePNGRepresentation(imageContent)];
 }
 
@@ -124,6 +131,7 @@
 }
 
 - (void)setContent:(NSString *)content withEncoding:(NSStringEncoding)encoding {
+  self.encoding = encoding == NSUTF8StringEncoding ? @"utf-8" : @"base64";
   [self setData:[content dataUsingEncoding:encoding]];
 }
 
@@ -141,6 +149,7 @@
   AFGitHubBlob *copy = [super copyWithZone:zone];
   [copy setData:self.data];
   [copy setSize:self.size];
+  [copy setEncoding:self.encoding];
   return copy;
 }
 
@@ -150,6 +159,7 @@
   if(self = [super initWithCoder:aDecoder]) {
     self.data = [aDecoder decodeObjectForKey:@"data"];
     self.size = [aDecoder decodeIntegerForKey:@"size"];
+    self.encoding = [aDecoder decodeObjectForKey:@"encoding"];
   }
   return self;
 }
@@ -157,6 +167,7 @@
 - (void)encodeWithCoder:(NSCoder *)aCoder {
   [aCoder encodeObject:self.data forKey:@"data"];
   [aCoder encodeInteger:self.size forKey:@"size"];
+  [aCoder encodeObject:self.encoding forKey:@"encoding"];
 }
 
 

@@ -36,6 +36,7 @@
 @property (nonatomic, copy) NSData *data;
 @property (nonatomic, copy) NSString *base64Content;
 @property (nonatomic, copy) NSString *content;
+@property (nonatomic, copy) NSString *encoding;
 #if __IPHONE_OS_VERSION_MIN_REQUIRED
 @property (nonatomic, copy) UIImage *imageContent;
 #else
