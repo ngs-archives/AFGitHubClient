@@ -1,24 +1,23 @@
+PODS:
+  - AFNetworking (1.1.0)
+  - AFOAuth2Client (0.1.0):
+    - AFNetworking (~> 1.0)
+  - BlocksKit (1.8.1):
+    - libffi
+  - libffi (3.0.11)
+  - SVProgressHUD (0.9)
 
-PODS: 
-- AFNetworking (1.1.0)
-- AFOAuth2Client (0.1.0): 
-  - AFNetworking (~> 1.0)
-- BlocksKit (1.8.1): 
-  - libffi
-- SVProgressHUD (0.9)
-- libffi (3.0.11)
+DEPENDENCIES:
+  - AFNetworking
+  - AFOAuth2Client
+  - BlocksKit
+  - SVProgressHUD
 
-DEPENDENCIES: 
-- AFNetworking
-- AFOAuth2Client
-- BlocksKit
-- SVProgressHUD
-
-SPEC CHECKSUMS: 
+SPEC CHECKSUMS:
   AFNetworking: 761a418233d280c1e0580bcb76ff9cb4c3073d17
   AFOAuth2Client: 2d1a21039fcc086254b0564428677fbbee0a4972
   BlocksKit: 18102744fd7c44b54f1e54ce6ffe9258bcb5df81
-  SVProgressHUD: 98935fbafaf0031df4a9cafca3c66eaf3da06967
   libffi: 8a1d9ba43c0c84b546b42c6f742714e73aa07ae1
+  SVProgressHUD: 03d4845ec8e64591726428a08236c6a5489d45f8
 
-COCOAPODS: 0.16.1
+COCOAPODS: 0.19.1
